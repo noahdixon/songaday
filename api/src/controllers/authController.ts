@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AuthServiceResponse, registerUser, authenticateUser, refreshTokens, deleteToken } from '../services/authService';
+import { AuthServiceResponse, registerUser, authenticateUser, setRefreshTokenCookie, refreshTokens, deleteToken } from '../services/authService';
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
     const email: string | undefined = req.body.email;
@@ -8,7 +8,7 @@ export const register = async (req: Request, res: Response): Promise<Response> =
     
     // Check that email and password were passed
     if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required' });
+        return res.status(400).json({ error: "Email and password are required" });
     }
 
     // Attempt to register user
@@ -24,29 +24,31 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
 
     // Check that email and password were passed
     if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required' });
+        return res.status(400).json({ error: "Email and password are required" });
     }
     
     // Authenticate User
     const authResponse: AuthServiceResponse = await authenticateUser(email, password);
     if (!authResponse.success) return res.status(authResponse.code!).json({ error: authResponse.error! });
 
-    // Send tokens
-    return res.json({ accessToken: authResponse.accessToken, refreshToken: authResponse.refreshToken });
+    // Set refresh token as HttpOnly cookie
+    setRefreshTokenCookie(res, authResponse.refreshToken!);
+
+    return res.json({ accessToken: authResponse.accessToken });
 };
 
 export const refreshToken = (req: Request, res: Response) => {
-    const refreshToken: string = req.body.token;
+    const refreshToken: string | undefined = req.cookies.refreshToken;
 
     // Check that token is provided
-    if (!refreshToken) return res.status(401).json({ error: 'Refresh token is required' });
+    if (!refreshToken) return res.status(401).json({ error: "INVALID_REFRESH_TOKEN" });
 
     // Attempt to generate new tokens
     refreshTokens(res, refreshToken);
 };
 
 export const logout = (req: Request, res: Response) => {
-    const refreshToken: string = req.body.token;
+    const refreshToken: string | undefined = req.cookies.refreshToken;
 
     // Check that token is provided
     if (!refreshToken) return res.status(401).json({ error: 'Refresh token is required' });

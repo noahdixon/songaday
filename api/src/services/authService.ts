@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { PrismaClient, Token } from "@prisma/client";
 import { User } from '@prisma/client';
-import { off } from 'process';
 
 const prisma = new PrismaClient();
 
@@ -90,7 +89,7 @@ export const registerUser = async (email: string, password: string, phone?: stri
             hashedPassword = await bcrypt.hash(password, 11);
         } catch {
             // Error if hashing fails
-            return { success: false, code: 500, error: "Server error hashing password" };
+            return { success: false, code: 500, error: "HASHING_ERROR" };
         }
 
         // Register user in database
@@ -145,7 +144,7 @@ export const generateRefreshToken = async (userId: number): Promise<string | Aut
             dbToken =  await bcrypt.hash(token, 11);
         } catch {
             // Error if hashing fails
-            return { success: false, code: 500, error: "Server error hashing token" };
+            return { success: false, code: 500, error: "HASHING_ERROR" };
         }
 
         // Check if a refresh token already exists for user
@@ -156,7 +155,7 @@ export const generateRefreshToken = async (userId: number): Promise<string | Aut
                 where: { userId: userId },
                 data: {
                     token: dbToken,
-                    expiresAt: new Date(Date.now() + 5 * 60 * 1000), // token expires in 1 minute
+                    expiresAt: new Date(Date.now() + 0.5 * 60 * 1000), // token expires in 30 seconds
                 },
             });
         } else {
@@ -165,15 +164,42 @@ export const generateRefreshToken = async (userId: number): Promise<string | Aut
                 data: {
                     userId: userId,
                     token: dbToken,
-                    expiresAt: new Date(Date.now() + 1 * 60 * 1000), // token expires in 1 minute
+                    expiresAt: new Date(Date.now() + 0.5 * 60 * 1000), // token expires in 30 seconds
                 },
             });
         }
         return jwt.sign({ id: userId, token: token }, process.env.REFRESH_TOKEN_SECRET as string);
     } catch {
         // Error if db calls fail
-        return { success: false, code: 500, error: "Server error interacting with the database" };
+        return { success: false, code: 500, error: "DATABASE_ERROR" };
     }
+}
+
+/**
+ * Sets the refresh token as an http only secure cookie in the response
+ * @param res The response
+ * @param refreshToken The refresh token string
+ */
+export const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // Cookie expires in 7 days
+    });
+}
+
+/**
+ * Clears the refresh token cookie
+ * @param res The response
+ */
+export const deleteRefreshTokenCookie = (res: Response) => {
+    res.cookie('refreshToken', '', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 0 // Cookie expires immediately
+    });
 }
 
 /**
@@ -197,7 +223,7 @@ export const authenticateUser = async (email: string, password: string): Promise
             success = await bcrypt.compare(password, user.password);
         } catch {
             // Error if hashing fails
-            return { success: false, code: 500, error: "Server error hashing password" };
+            return { success: false, code: 500, error: "HASHING_ERROR" };
         }
 
         // Error if password is incorrect
@@ -221,7 +247,7 @@ export const authenticateUser = async (email: string, password: string): Promise
         return { success: success, accessToken: accessToken, refreshToken: refreshToken };
     } catch {
         // Error if db calls fail
-        return { success: false, code: 500, error: "Server error interacting with the database" };
+        return { success: false, code: 500, error: "DATABASE_ERROR" };
     }
 }
 
@@ -243,7 +269,7 @@ export const refreshTokens = (res: Response, refreshToken: string) => {
             const dbRefreshToken: Token | null = await getTokenFromId(payload.id);
 
             // Send error if token is expired or doesnt exist on db
-            if (!dbRefreshToken || dbRefreshToken.expiresAt < new Date(Date.now())) return res.status(403).json({ error: 'Token is expired.' });
+            if (!dbRefreshToken || dbRefreshToken.expiresAt < new Date(Date.now())) return res.status(403).json({ error: "INVALID_REFRESH_TOKEN" });
 
             // Compare payload token string to db token string
             let success :boolean;
@@ -251,11 +277,11 @@ export const refreshTokens = (res: Response, refreshToken: string) => {
                 success = await bcrypt.compare(payload.token, dbRefreshToken.token);
             } catch {
                 // Error if hashing fails
-                return { success: false, code: 500, error: "Server error hashing password" };
+                return { success: false, code: 500, error: "HASHING_ERROR" };
             }
             
             // Send error if token strings do not match
-            if(!success) return res.status(403).json({ error: 'Token is expired.' });
+            if(!success) return res.status(403).json({ error: "INVALID_REFRESH_TOKEN" });
 
             // Generate new access token
             const accessToken: string = generateAccessToken(payload.id);
@@ -264,10 +290,12 @@ export const refreshTokens = (res: Response, refreshToken: string) => {
             const refreshToken: string | AuthServiceResponse = await generateRefreshToken(payload.id);
             if (typeof refreshToken !== "string") return res.status(refreshToken.code!).json({ error: refreshToken.error! });
 
-            return res.json({ accessToken: accessToken, refreshToken: refreshToken });
+            // Set tokens and send response
+            setRefreshTokenCookie(res, refreshToken);
+            return res.json({ accessToken: accessToken });
         } catch {
             // Error if db calls fail
-            return { success: false, code: 500, error: "Server error interacting with the database" };
+            return { success: false, code: 500, error: "DATABASE_ERROR" };
         }
     });
 }
@@ -282,30 +310,33 @@ export const deleteToken = async (res: Response, refreshToken: string) => {
             // Get token from db using id
             const dbRefreshToken: Token | null = await getTokenFromId(payload.id);
 
-            // Send error if token is expired or doesnt exist on db
-            if (!dbRefreshToken) return res.status(403).json({ error: 'Token is explired, user is already signed out.' });
+            // Send error if token doesnt exist on db
+            if (!dbRefreshToken) return res.status(403).json({ error: 'Token is expired, user is already signed out.' });
 
             // Compare payload token string to db token string
-            let success :boolean;
+            let success: boolean;
             try {
                 success = await bcrypt.compare(payload.token, dbRefreshToken.token);
             } catch {
                 // Error if hashing fails
-                return { success: false, code: 500, error: "Server error hashing password" };
+                return { success: false, code: 500, error: "HASHING_ERROR" };
             }
             
             // Send error if token strings do not match
-            if(!success) return res.status(403).json({ error: 'Token is explired, user is already signed out.' });
+            if(!success) return res.status(403).json({ error: 'Token is expired, user is already signed out.' });
 
-            // Delete token
+            // Delete token from database
             await prisma.token.delete({
                 where: { userId: payload.id }
             });
 
+            // Clear token on user brower
+            deleteRefreshTokenCookie(res);
+
             return res.sendStatus(204);
         } catch {
             // Error if db calls fail
-            return { success: false, code: 500, error: "Server error interacting with the database" };
+            return { success: false, code: 500, error: "DATABASE_ERROR" };
         }
     });
 }

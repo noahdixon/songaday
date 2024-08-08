@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import { LoggedInRoute, LoggedOutRoute } from './components/ProtectedRoutes';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App: React.FC = () => {
+    return (
+        <div>
+            <ToastContainer
+            position="top-center"
+            autoClose={2000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"/>
+            <BrowserRouter>
+                <Routes>
+                    <Route index element={<HomePage/>} />
+                    <Route path="/home" element={<HomePage/>} />
+                    <Route path="/login" element={<LoggedOutRoute element={<LoginPage />} />} />
+                    <Route path="/register" element={<LoggedOutRoute element={<RegisterPage />} />} />
+                </Routes>
+            </BrowserRouter>
+        </div>
+        
+    );
+};
 
 export default App;

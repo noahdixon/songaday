@@ -2,9 +2,8 @@ import dotenv from 'dotenv';
 import express from "express";
 import { Request, Response, NextFunction } from 'express';
 import cors from "cors";
-import bcrypt from "bcrypt";
-import jwt, { JsonWebTokenError } from 'jsonwebtoken';
-import { PrismaClient } from "@prisma/client";
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
 import { checkJSON } from './middlewares/jsonMiddleware';
 import { authenticateToken } from './middlewares/authMiddleware';
 import authRoutes from './routes/authRoutes';
@@ -36,9 +35,14 @@ const env: Env = {
 // #endregion
 
 const app = express();
-
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true // Allow cookies to be sent
+}));
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+
+
 
 // Global error-handling middleware for JSON parsing errors
 app.use(checkJSON);
@@ -51,12 +55,20 @@ interface Post {
 const posts: Post[] = [
     {
         userId: 5,
-        message: 'THIS IS A POST BABY'
+        message: 'This is a post by the person with id 5'
     },
     {
         userId: 6,
-        message: 'SIIIIIHIIIIRIIIRIIRIIIRRR'
-    }
+        message: 'This is a post by the person with id 6'
+    },
+    {
+        userId: 7,
+        message: 'This is a post by the person with id 7'
+    },
+    {
+        userId: 7,
+        message: 'This is yet another post by the person with id 7'
+    },
 ];
 
 app.use('/auth', authRoutes);
@@ -65,5 +77,5 @@ app.get('/posts', authenticateToken, (req: Request, res: Response): void => {
     res.json(posts.filter(post => post.userId === req.userId));
 });
 
-app.listen(3000);
-console.log("Listening on 3000");
+app.listen(5000);
+console.log("Listening on 5000");
