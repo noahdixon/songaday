@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node api/dist/index.js",
-    "heroku-postbuild": "npm run build:api && npm run build:frontend",
+    "heroku-postbuild": "npm install && npm run build:api && npm run build:frontend",
     "build:api": "cd api && npm install && npm run build",
     "build:frontend": "cd frontend && npm install && npm run build"
   },
@@ -12,5 +12,8 @@
   "description": "",
   "engines": {
     "node": ">=20.x"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
   }
 }
