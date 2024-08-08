@@ -1,0 +1,16 @@
+{
+  "name": "songaday",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node api/dist/index.js",
+    "heroku-postbuild": "npm run build:api && npm run build:frontend",
+    "build:api": "cd api && npm install && npm run build",
+    "build:frontend": "cd frontend && npm install && npm run build"
+  },
+  "author": "noahdixon",
+  "license": "ISC",
+  "description": "",
+  "engines": {
+    "node": ">=20.x"
+  }
+}

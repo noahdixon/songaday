@@ -5,34 +5,9 @@ import cors from "cors";
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import { checkJSON } from './middlewares/jsonMiddleware';
+import path from 'path';
 import { authenticateToken } from './middlewares/authMiddleware';
 import authRoutes from './routes/authRoutes';
-
-
-// #region Environment Setup
-dotenv.config();
-
-interface Env {
-    DATABASE_URL: string;
-    ACCESS_TOKEN_SECRET: jwt.Secret;
-    REFRESH_TOKEN_SECRET: jwt.Secret;
-}
-
-// Runtime validation for environment variables
-const getEnvVariable = (key: keyof Env): string => {
-    const value = process.env[key];
-    if (!value) {
-        throw new Error(`Environment variable ${key} is not defined`);
-    }
-    return value;
-};
-
-const env: Env = {
-    DATABASE_URL: getEnvVariable("DATABASE_URL"),
-    ACCESS_TOKEN_SECRET: getEnvVariable("ACCESS_TOKEN_SECRET"),
-    REFRESH_TOKEN_SECRET: getEnvVariable("REFRESH_TOKEN_SECRET")
-};
-// #endregion
 
 const app = express();
 app.use(cors({
@@ -42,10 +17,11 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-
-
 // Global error-handling middleware for JSON parsing errors
 app.use(checkJSON);
+
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, '../../frontend/build')));
 
 interface Post {
     userId: number;
@@ -77,5 +53,10 @@ app.get('/posts', authenticateToken, (req: Request, res: Response): void => {
     res.json(posts.filter(post => post.userId === req.userId));
 });
 
-app.listen(5000);
+// All other routes serve React app
+app.get('*', (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
+});
+
+app.listen(process.env.PORT);
 console.log("Listening on 5000");
