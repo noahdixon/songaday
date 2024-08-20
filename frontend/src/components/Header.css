@@ -1,0 +1,68 @@
+@import "../global.css";
+
+.header {
+    background-color: var(--purple-background-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center ; /* Vertically centers items if they have different heights */
+    padding: 14px 20px; /* Adds space inside the div (10px top/bottom, 20px left/right) */
+    margin: 20px; /* Adds space around the div */
+    border-radius: 15px; /* Optional rounded corners */
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 30px; /* Adjust height as needed */
+    margin-bottom: -3px;
+}
+
+.profile-container {
+    position: relative; /* Necessary for positioning the dropdown */
+}
+
+.profile {
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: -3px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 160%;
+    right: -20px;
+    background-color: var(--purple-background-color);
+    border-radius: 8px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    white-space: nowrap; 
+    display: block;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    color: aliceblue;
+    transition: 100ms ease;
+}
+
+.dropdown-item-top {
+    border-radius: 8px 8px 0 0;
+}
+
+.dropdown-item-bottom {
+    border-radius: 0 0 8px 8px;
+}
+
+
+.dropdown-item:hover {
+    background-color: var(--purple-background-color-highlight);
+    color: var(--pink-color);
+}

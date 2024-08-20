@@ -14,7 +14,7 @@ const LoginForm: React.FC = () => {
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if(isLoggedIn) {
-            navigate("/home");
+            navigate("/");
             return;
         }
         const formData = new FormData(event.currentTarget);
@@ -26,7 +26,7 @@ const LoginForm: React.FC = () => {
             if (loginResult.success) {
                 setIsLoggedIn(true);
                 setErrorMessage("");
-                navigate("/home");
+                navigate("/");
                 toast.success("Login successful.")
             } else {
                 setErrorMessage(loginResult.error!);

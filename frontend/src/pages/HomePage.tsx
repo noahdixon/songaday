@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { logout } from '../services/authService';
 import { getPosts } from '../services/tempPostService';
+import { toast } from 'react-toastify';
 
 const HomePage: React.FC = () => {
     const { isLoggedIn, setIsLoggedIn } = useAuth();
@@ -37,6 +38,7 @@ const HomePage: React.FC = () => {
         logout();
         setIsLoggedIn(false);
         navigate("/login");
+        toast.success("Logout successful.");
     }
 
     return (

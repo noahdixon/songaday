@@ -1,0 +1,33 @@
+.content-radio-container {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.content-radio-item {
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer; 
+    margin-right: 10px; 
+    color: aliceblue;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 100ms ease;
+}
+
+.spotify-radio-logo {
+    padding: 10px 10px 10px 0;
+    margin-right: 5px;
+}
+
+.content-radio-item:hover {
+    background-color: var(--pink-color-highlight);
+}
+
+/* Selected Item Styles */
+.content-radio-item.selected {
+    background-color: var(--pink-color-highlight); /* Background color of selected item */
+    color: var(--pink-color); /* Text color of selected item */
+}

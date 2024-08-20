@@ -1,0 +1,68 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow-y: hidden;
+}
+
+.app-container {
+    background-image: url("../../public/wallpaper.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    display: flex;
+    /* flex: 1; */
+}
+
+.dots {
+    margin-top: 4px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.content {
+    background-color: var(--purple-background-color);
+    border-radius: 15px;
+    flex: 1;
+    width: max-content;
+    margin: 0 20px 20px 20px;
+    padding: 20px;
+}
+
+.context-menu {
+    position: absolute;
+    background-color: var(--purple-background-color-light);
+    z-index: 1000;
+    border-radius: 8px;
+}
+
+.context-menu:hover {
+    background-color: var(--purple-background-color-lightest);
+    color: var(--pink-color);
+}
+
+.context-menu button {
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    border-radius: 8px;
+}
+
+.list-content-separator {
+    height: 10px;
+}
+
+.spotify-logo {
+    width: 100px;
+    height: 30px;
+    vertical-align: center;
+}

@@ -1,0 +1,44 @@
+/* Sidebar Container */
+.sidebar {
+    background-color: var(--purple-background-color);
+    border-radius: 15px;
+    width: fit-content;
+    margin: 0 0 20px 20px;
+    padding: 15px 15px 5px 15px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar Items */
+.sidebar-item {
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer; 
+    margin-bottom: 10px; 
+    color: aliceblue; 
+    display: flex; 
+    align-items: center;
+    font-size: 14px;
+    text-decoration: none;
+    width: fit-content;
+    transition: 100ms ease;
+}
+
+.sidebar-item:hover {
+    background-color: var(--pink-color-highlight);
+}
+
+/* Selected Item Styles */
+.sidebar-item.selected {
+    background-color: var(--pink-color-highlight); /* Background color of selected item */
+    color: var(--pink-color); /* Text color of selected item */
+}
+
+
+/* Media query to hide sidebar */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none; /* Hide the sidebar */
+    }
+}

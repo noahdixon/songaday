@@ -1,0 +1,65 @@
+/* Importing the Roboto font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+    --purple-background-color: rgba(22, 0, 16, 0.93);
+    --purple-background-color-solid: rgb(22, 0, 16);
+    --purple-background-color-highlight: rgba(67, 45, 61, 0.93);
+    --purple-background-color-highlight-solid: rgb(67, 45, 61);
+    --purple-background-color-light: rgba(87, 65, 81, 0.93);
+    --purple-background-color-lightest: rgba(107, 85, 101, 0.93);
+    --pink-color: rgb(255, 183, 255);
+    --pink-color-highlight: rgba(255, 245, 255, 0.15);
+    --grey: rgba(240, 248, 255, 0.572);
+}
+
+* {
+    /* border: 1px solid red !important; */
+    text-decoration: none;
+}
+
+/* Scrollbar */
+/* Firefox */
+* {
+scrollbar-width: auto;
+scrollbar-color: var(--purple-background-color-highlight) var(--purple-background-color);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+background-color: #8f54a0;
+border-radius: 10px;
+border: 3px solid #ffffff;
+}
+
+a:visited { color: aliceblue; }
+a:focus { color: aliceblue; }
+a:active { color: aliceblue; }
+
+/* Apply Roboto globally */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: aliceblue;
+}
+
+/* Remove default button styling */
+button {
+    all: unset; /* Remove all inherited and default styles */
+    display: inline; /* Set display to inline if necessary */
+    cursor: pointer; /* Keep pointer cursor for usability */
+}
+
+.Toastify__toast {
+    border-radius: 8px;
+    background-color: var(--purple-background-color-highlight);
+}

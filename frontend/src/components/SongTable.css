@@ -1,0 +1,223 @@
+* {
+    font-size: 14px;
+}
+
+table {
+    margin-top: 15px;
+    width: 100%;
+    border-collapse: collapse;
+    display: block;
+    height: calc(100vh - 226px); 
+    overflow-y: auto;  
+    overflow-x: hidden; 
+}
+
+a,.song-entry {
+    transition: 100ms ease;
+}
+
+.song-entry:hover, .song-entry.context-menu-active {
+    background-color: var(--purple-background-color-highlight);
+}
+
+a:hover {
+    color: var(--pink-color);
+}
+
+thead {
+    position: sticky;
+    top: 0px;
+    background-image: linear-gradient(var(--purple-background-color-highlight-solid), var(--purple-background-color-solid));
+}
+
+th {
+    top: 0px;
+    padding: 0px 10px;
+    position: sticky;
+    /* z-index: 200; */
+}
+
+td {
+    padding: 12px 10px;
+}
+
+td, th {
+    text-align: left;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.first-head {
+    border-radius: 8px 0 0 0;
+}
+
+.last-head {
+    border-radius: 0 8px 0 0;
+}
+
+
+td:nth-child(1) {
+    border-radius: 8px 0 0 8px;
+}
+
+th:nth-child(2),td:nth-child(2) {
+    text-align: center;
+    width: 4.5%;
+    vertical-align: center;
+}
+
+th:nth-child(3),td:nth-child(3) {
+    text-align: center;
+    width: 5.5%;
+    vertical-align: center;
+}
+
+th:nth-child(4),td:nth-child(4) {
+    width: 40%;
+    max-width: 0;
+}
+
+th:nth-child(5),td:nth-child(5) {
+    width: 30%;
+    max-width: 0;
+}
+
+th:nth-child(6),td:nth-child(6) {
+    width: 10%;
+    max-width: 0;
+}
+
+th:nth-child(7),td:nth-child(7) {
+    width: 10%;
+    max-width: 0;
+}
+
+td:nth-child(8) {
+    border-radius: 0 8px 8px 0;
+}
+
+.line-box {
+    top: 35px;
+    position: sticky;
+}
+
+.line {
+    border-color: var(--pink-color);
+    background-color: var(--pink-color);
+    padding: 0;
+    position: sticky;
+}
+
+.line-box {
+    padding: 5px 10px 5px 10px;
+}
+
+.song-spotify-icon {
+    vertical-align:middle;
+    width: 25px;
+    height: 25px;
+}
+
+.song-album-art {
+    vertical-align:middle;
+    width: 40px;
+    height: 40px;
+}
+
+.title-artist {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.title {
+    font-size: 16px;
+}
+
+.artist {
+    color: var(--grey);
+    font-weight: 400;
+}
+
+.title, .artist {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: min-content;
+}
+
+/* Media query to hide popularity column */
+@media (max-width: 1200px) {
+    .popularity-col {
+        display: none; /* Hide the sidebar */
+    }
+
+    th:nth-child(2),td:nth-child(2) {
+        text-align: center;
+        width: 6.111111111%;
+        vertical-align: center;
+    }
+    
+    th:nth-child(3),td:nth-child(3) {
+        text-align: center;
+        width: 5%;
+        vertical-align: center;
+    }
+    
+    th:nth-child(4),td:nth-child(4) {
+        width: 44.44444444%;
+        max-width: 0;
+    }
+    
+    th:nth-child(5),td:nth-child(5) {
+        width: 33.33333333%;
+        max-width: 0;
+    }
+    
+    th:nth-child(6),td:nth-child(6) {
+        width: 11.11111111%;
+        max-width: 0;
+    }
+}
+
+/* Media query to hide year column */
+@media (max-width: 900px) {
+    .year-col {
+        display: none; /* Hide the sidebar */
+    }
+
+    th:nth-child(2),td:nth-child(2) {
+        text-align: center;
+        width: 6.875%;
+        vertical-align: center;
+    }
+    
+    th:nth-child(3),td:nth-child(3) {
+        text-align: center;
+        width: 5.625%;
+        vertical-align: center;
+    }
+    
+    th:nth-child(4),td:nth-child(4) {
+        width: 50%;
+        max-width: 0;
+    }
+    
+    th:nth-child(5),td:nth-child(5) {
+        width: 37.5%;
+        max-width: 0;
+    }
+}
+
+/* Media query to hide number column */
+@media (max-width: 500px) {
+    .num-col {
+        display: none; /* Hide the sidebar */
+    }
+}

@@ -1,0 +1,90 @@
+.list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: calc(100vh - 226px); 
+    overflow-y: auto;  
+    overflow-x: hidden; 
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    transition: 150ms ease;
+    height: fit-content;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 180px;
+}
+
+.card:hover {
+    background-color: var(--purple-background-color-highlight);
+}
+
+.card-art {
+    vertical-align:middle;
+    width: 180px;
+    height: 180px;
+}
+
+.card-title {
+    font-size: 16px;
+    padding-top: 8px;
+}
+
+.card-subtitle {
+    padding-top: 4px;
+}
+
+.card-subtitle, .card-sub-subtitle {
+    color: var(--grey);
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.card-title, .card-subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: min-content;
+}
+
+.card-spotify-icon {
+    vertical-align:middle;
+    width: 30px;
+    height: 30px;
+    padding-right: 8px;
+}
+
+.card-bottom-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 7px;
+}
+
+.card-sub-subtitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Media query to reduce album size*/
+@media (max-width: 768px) { 
+    .card {
+        width: 140px;
+    }
+    
+    .card-art {
+        width: 140px;
+        height: 140px;
+    }
+}

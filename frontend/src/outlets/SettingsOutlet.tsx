@@ -1,0 +1,8 @@
+const SettingsOutlet: React.FC = () => {
+
+    return (
+        <div>Settings</div>
+    );
+}
+
+export default SettingsOutlet;

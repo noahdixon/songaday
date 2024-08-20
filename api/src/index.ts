@@ -10,10 +10,13 @@ import { authenticateToken } from './middlewares/authMiddleware';
 import authRoutes from './routes/authRoutes';
 
 const app = express();
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true // Allow cookies to be sent
-}));
+if (process.env.NODE_ENV === 'development') {
+    app.use(cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+    }));
+}
+
 app.use(express.json());
 app.use(cookieParser());
 

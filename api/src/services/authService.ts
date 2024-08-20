@@ -5,7 +5,10 @@ import { randomBytes } from 'crypto';
 import { PrismaClient, Token } from "@prisma/client";
 import { User } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const refreshTokenTime: number = 0.5 * 60 * 1000; // 30 seconds
+const accessTokenTime: string = "1d"; // 1 day
+
+const prisma: PrismaClient = new PrismaClient();
 
 export interface AccessPayload {
     id: number
@@ -120,7 +123,7 @@ export const registerUser = async (email: string, password: string, phone?: stri
  * @returns A signed access token
  */
 export const generateAccessToken = (userId: number): string => {
-    return jwt.sign({ id: userId }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: '15s' });
+    return jwt.sign({ id: userId }, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: accessTokenTime });
 };
 
 /**
@@ -155,7 +158,7 @@ export const generateRefreshToken = async (userId: number): Promise<string | Aut
                 where: { userId: userId },
                 data: {
                     token: dbToken,
-                    expiresAt: new Date(Date.now() + 0.5 * 60 * 1000), // token expires in 30 seconds
+                    expiresAt: new Date(Date.now() + refreshTokenTime), // token expires in 30 seconds
                 },
             });
         } else {
@@ -164,7 +167,7 @@ export const generateRefreshToken = async (userId: number): Promise<string | Aut
                 data: {
                     userId: userId,
                     token: dbToken,
-                    expiresAt: new Date(Date.now() + 0.5 * 60 * 1000), // token expires in 30 seconds
+                    expiresAt: new Date(Date.now() + refreshTokenTime), // token expires in 30 seconds
                 },
             });
         }
