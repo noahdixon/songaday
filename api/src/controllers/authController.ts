@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AuthServiceResponse, registerUser, authenticateUser, setRefreshTokenCookie, refreshTokens, deleteToken } from '../services/authService';
+import { AuthServiceResponse, registerUser, authenticateUser, setRefreshTokenCookie, refreshTokens, deleteToken } from '../services/AuthService';
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
     const email: string | undefined = req.body.email;
@@ -16,7 +16,7 @@ export const register = async (req: Request, res: Response): Promise<Response> =
 
     if (!authResponse.success) return res.status(authResponse.code!).json({ error: authResponse.error! });
     return res.sendStatus(201);
-}
+};
 
 export const login = async (req: Request, res: Response): Promise<Response> => {
     const email: string = req.body.email;

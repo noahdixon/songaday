@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import api from "./api";
 
 export interface AuthServiceResponse {
@@ -15,7 +16,7 @@ export const register = async (email: string, password: string, phone: string | 
             data = { email, password };
         }
         // Attempt register
-        const response = await api.post('/auth/register', data);
+        const response: AxiosResponse = await api.post('/auth/register', data);
         return { success: true }; 
     } catch (error: any) {
         return { success: false, error: error.response.data.error };
@@ -25,7 +26,7 @@ export const register = async (email: string, password: string, phone: string | 
 export const login = async (email: string, password: string): Promise<AuthServiceResponse> => {
     try {
         // Attempt log in
-        const response = await api.post('/auth/login', { email, password }, { withCredentials: true });
+        const response: AxiosResponse = await api.post('/auth/login', { email, password }, { withCredentials: true });
         localStorage.setItem('accessToken', response.data.accessToken);
         return { success: true }; 
     } catch (error: any) {
@@ -37,7 +38,7 @@ export const logout = async (): Promise<AuthServiceResponse> => {
     try {
         // Attempt logout
         localStorage.removeItem('accessToken');
-        const response = await api.delete('/auth/logout', { withCredentials: true });
+        const response: AxiosResponse = await api.delete('/auth/logout', { withCredentials: true });
         return { success: true }; 
     } catch (error: any) {
         if(!error.response?.data?.error) {
@@ -50,7 +51,7 @@ export const logout = async (): Promise<AuthServiceResponse> => {
 export const refreshToken = async (): Promise<AuthServiceResponse> => {
     try {
         // Attempt token refresh
-        const response = await api.post('/auth/token', {}, { withCredentials: true });
+        const response: AxiosResponse = await api.post('/auth/token', {}, { withCredentials: true });
         return { success: true, accessToken: response.data.accessToken }; 
     } catch (error: any) {
         return { success: false, error: error.response.data.error };

@@ -30,3 +30,8 @@ model Token {
   expiresAt   DateTime
   user        User      @relation(fields: [userId], references: [id])
 }
+
+model SpotifyToken {
+  id          Int       @id @default(autoincrement())
+  token       String
+}

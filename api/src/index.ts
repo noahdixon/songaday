@@ -1,13 +1,13 @@
-import dotenv from 'dotenv';
 import express from "express";
 import { Request, Response, NextFunction } from 'express';
 import cors from "cors";
-import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
-import { checkJSON } from './middlewares/jsonMiddleware';
+import { checkJSON } from './middlewares/JsonMiddleware';
 import path from 'path';
-import { authenticateToken } from './middlewares/authMiddleware';
-import authRoutes from './routes/authRoutes';
+import { authenticateToken } from './middlewares/AuthMiddleware';
+import AuthRoutes from './routes/AuthRoutes';
+import { searchContent } from "./controllers/SpotifyController";
+
 
 const app = express();
 if (process.env.NODE_ENV === 'development') {
@@ -50,7 +50,9 @@ const posts: Post[] = [
     },
 ];
 
-app.use('/auth', authRoutes);
+app.use('/auth', AuthRoutes);
+// app.use('/search', authenticateToken, searchRoutes);
+app.post('/search', authenticateToken, searchContent);
 
 app.get('/posts', authenticateToken, (req: Request, res: Response): void => {
     res.json(posts.filter(post => post.userId === req.userId));
