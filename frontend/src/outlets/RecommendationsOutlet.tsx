@@ -1,7 +1,7 @@
 const RecommendationsOutlet: React.FC = () => {
 
     return (
-        <div>Recommendations</div>
+        <div className="loader">Coming Soon 🤠</div>
     );
 }
 

@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    height: calc(100vh - 226px); 
     overflow-y: auto;  
     overflow-x: hidden; 
 }
@@ -40,6 +39,22 @@
 
 .card-subtitle {
     padding-top: 4px;
+}
+
+.card-artist {
+    color: var(--grey);
+    font-weight: 400;
+    display: inline;
+}
+
+.card-artist a {
+    color: var(--grey);
+    font-weight: 400;
+    display: inline;
+}
+
+a:hover {
+    color: var(--pink-color);
 }
 
 .card-subtitle, .card-sub-subtitle {

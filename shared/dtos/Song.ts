@@ -1,12 +1,9 @@
-interface Artist {
-    name: string,
-    link: string
-}
+import { Artist } from "./Artist"
 
 export interface Song {
     id: string,
-    link: string,
     title: string,
+    link: string,
     artists: Artist[]
     album: string
     albumLink: string

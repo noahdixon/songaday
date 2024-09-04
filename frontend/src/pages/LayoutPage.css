@@ -1,22 +1,8 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    overflow-y: hidden;
-}
-
-.app-container {
-    background-image: url("../../public/wallpaper.webp");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: top;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+@import "../global.css";
 
 .main-content {
     display: flex;
-    /* flex: 1; */
+    flex: 1;
 }
 
 .dots {
@@ -35,6 +21,23 @@ html, body {
     padding: 20px;
 }
 
+.outlet {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.outlet-component {
+    height: 100%;
+}
+
+.loader {
+    width: 100%;
+    height: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .context-menu {
     position: absolute;
     background-color: var(--purple-background-color-light);
@@ -64,5 +67,59 @@ html, body {
 .spotify-logo {
     width: 100px;
     height: 30px;
-    vertical-align: center;
+    padding: 10px 10px 10px 0;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.spotify-radio-logo {
+    margin-bottom: 5px;
+}
+
+.spotify-radio-logo-less {
+    margin-bottom: 2px;
+}
+
+.logo-radio {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar{
+    background-color: var(--purple-background-color-highlight);
+    max-width: 300px;
+    display: flex;
+    border-radius: 15px;
+    flex-grow: 1;
+}
+
+.search-input {
+    flex-grow: 1;
+    margin: 3px 8px 3px 3px;
+    background-color: transparent;
+    border: none;
+    color: aliceblue;
+    outline: none;
+    font-weight: 550;
+}
+
+::placeholder {
+    color: var(--grey-darker);
+    opacity: 1; /* Firefox */
+}
+
+.search-icon {
+    width: 15px;
+    height: 15px;
+    padding-left: 8px;
+    vertical-align: middle;
+}
+
+.faded-text {
+    color: var(--grey-darker);
+}
+
+.top-section {
+    margin-top: -10px;
+    margin-bottom: 15px;
 }

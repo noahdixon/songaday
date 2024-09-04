@@ -1,7 +1,7 @@
 const ProfileOutlet: React.FC = () => {
 
     return (
-        <div>Edit Profile</div>
+        <div className="loader">Coming Soon 🤠</div>
     );
 }
 

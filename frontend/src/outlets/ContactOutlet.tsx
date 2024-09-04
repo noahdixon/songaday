@@ -1,7 +1,7 @@
 const ContactOutlet: React.FC = () => {
 
     return (
-        <div>Contact</div>
+        <div className="loader">Coming Soon 🤠</div>
     );
 }
 

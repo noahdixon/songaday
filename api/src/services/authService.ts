@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { PrismaClient, Token } from "@prisma/client";
 import { User } from '@prisma/client';
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 const refreshTokenTime: number = 0.5 * 60 * 1000; // 30 seconds
 const accessTokenTime: string = "1d"; // 1 day

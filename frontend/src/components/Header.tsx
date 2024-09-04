@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { logout } from '../services/authService';
 import { toast } from 'react-toastify';
-import "../global.css";
 import "./Header.css";
+import DropDownNavBar from './DropDownNavBar';
 
 const Header: React.FC = () => {
     const { isLoggedIn, setIsLoggedIn } = useAuth();
@@ -32,15 +32,24 @@ const Header: React.FC = () => {
         toast.success("Logout successful.");
     }
 
-    // Add event listener to detect clicks outside the dropdown
+    const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+            setDropdownVisible(false); // Close dropdown when Escape is pressed
+        }
+    };
+
+    // Add event listeners for clicks outside the dropdown and keydown for Escape key
     React.useEffect(() => {
         if (dropdownVisible) {
             document.addEventListener('click', handleClickOutside);
+            document.addEventListener('keydown', handleKeyDown);
         } else {
             document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener('keydown', handleKeyDown);
         }
         return () => {
             document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener('keydown', handleKeyDown);
         };
     }, [dropdownVisible]);
 
@@ -49,12 +58,15 @@ const Header: React.FC = () => {
             <Link to="/" className="logo-link">
                 <img src="/songaday-logo.png" alt="Songaday Logo" className="logo" />
             </Link>
+
+            <DropDownNavBar></DropDownNavBar>
+
             <div className="profile-container" onClick={toggleDropdown}>
                 <img src="/user-profile.png" alt="User Profile" className="profile" />
                 {dropdownVisible && (
-                    <div className="dropdown-menu">
-                        <Link to="/profile" className="dropdown-item dropdown-item-top">Edit Profile</Link>
-                        <button className="dropdown-item dropdown-item-bottom" onClick={handleLogout}>Logout</button>
+                    <div className="header-dropdown-menu">
+                        <Link to="/profile" className="header-dropdown-item header-dropdown-item-top">Edit Profile</Link>
+                        <button className="header-dropdown-item header-dropdown-item-bottom" onClick={handleLogout}>Logout</button>
                     </div>
                 )}
             </div>

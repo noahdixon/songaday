@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
+import { Artist } from '@shared/dtos/Artist';
+import { useUserContent } from "../context/UserContentContext";
 import "./CardList.css"
 
-interface Artist {
-    name: string;
-    artistLink: string;
-    artistImg: string;
+interface ArtistListProps {
+    artists: Artist[],
+    addArtists: boolean,
+    subtractFromHeight: number
 }
 
-let artists: Artist[] = [
-    
-];
+const ArtistList: React.FC<ArtistListProps> = ({artists, addArtists=true, subtractFromHeight}) => {
+    const { addArtist, removeArtist } = useUserContent();
 
-const ArtistList: React.FC = () => {
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; artistIndex: number | null, artist: Artist | null }>({
         x: 0,
         y: 0,
@@ -20,12 +20,15 @@ const ArtistList: React.FC = () => {
         artist: null
     });
 
+    const contextMenuWidth: number = addArtists ? 84 : 109;
+
     const handleShowMenu = (event: React.MouseEvent, index: number, context: boolean = true) => {
         event.preventDefault(); 
 
         const target = event.currentTarget as HTMLElement;
         const rect = target.getBoundingClientRect();
-        const right = rect.right - 109;
+        const right = rect.right - contextMenuWidth;
+        
         setContextMenu({
             x: event.clientX > right ? right : event.clientX,
             y: context ? event.clientY : rect.bottom,
@@ -36,12 +39,17 @@ const ArtistList: React.FC = () => {
     };
 
     const handleRemoveArtist = () => {
-        if (contextMenu.artistIndex !== null) {
-            // Logic to remove the song
-            artists = artists.filter((artist) => artist != contextMenu.artist)
-
+        if (typeof contextMenu.artist?.id === 'string') {
+            removeArtist(contextMenu.artist.id);
         }
         setContextMenu({ ...contextMenu, visible: false });
+    };
+
+    const handleAddArtist = async (): Promise<void> => {
+        if (contextMenu.artist) {
+            addArtist(contextMenu.artist);
+        }
+        setContextMenu({ artist: null, artistIndex: null, visible: false, x: 0, y: 0 });
     };
 
     const handleClickOutside = () => {
@@ -66,21 +74,21 @@ const ArtistList: React.FC = () => {
     }, []);
 
     return (
-        <div className="list">
+        <div className="list" style={{ height: `calc(100vh - ${subtractFromHeight}px)` }}>
             {artists.map((artist: Artist, index: number) => (
                 <div key={index}
                      className={`card ${contextMenu.artistIndex === index ? "context-menu-active" : ""}`}
                      onContextMenu={(e) => handleShowMenu(e, index)}>
 
-                    <a href={artist.artistLink} target="_blank" rel="noopener noreferrer">
-                        <img src={artist.artistImg} alt={`${artist.name}`} className="card-art" />
+                    <a href={artist.link} target="_blank" rel="noopener noreferrer">
+                        <img src={artist.image} alt={`${artist.name}`} className="card-art" />
                     </a>
 
-                    <a href={artist.artistLink} target="_blank" className="card-title">{artist.name}</a>
+                    <a href={artist.link} target="_blank" className="card-title">{artist.name}</a>
 
      
                     <div className="card-bottom-container">
-                        <a href={artist.artistLink} target="_blank" rel="noopener noreferrer">
+                        <a href={artist.link} target="_blank" rel="noopener noreferrer">
                             <img src="/Spotify_Icon_RGB_White.png" alt="Spotify" className="card-spotify-icon" />
                         </a>
                         <button onClick={(e) => { 
@@ -96,7 +104,9 @@ const ArtistList: React.FC = () => {
             
             {contextMenu.visible && (
                 <div className="context-menu" style={{ top: contextMenu.y, left: contextMenu.x }}>
-                    <button onClick={handleRemoveArtist}>Remove Artist</button>
+                    <button onClick={addArtists ? handleAddArtist : handleRemoveArtist}>
+                    {addArtists ? 'Like Artist' : 'Remove Artist'}
+                    </button>
                 </div>
             )}
         </div>

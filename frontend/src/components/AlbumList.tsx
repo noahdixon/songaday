@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
+import { Album } from '@shared/dtos/Album';
+import { useUserContent } from "../context/UserContentContext";
 import "./CardList.css"
 
-interface Album {
-    title: string;
-    albumLink: string;
-    year: string;
-    artist: string;
-    artist_link: string;
-    albumArt: string;
+interface AlbumListProps {
+    albums: Album[],
+    addAlbums: boolean,
+    subtractFromHeight: number
 }
 
-let albums: Album[] = [
+const AlbumList: React.FC<AlbumListProps> = ({ albums, addAlbums=true, subtractFromHeight }) => {
+    const { addAlbum, removeAlbum } = useUserContent();
 
-];
-
-const AlbumList: React.FC = () => {
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; albumIndex: number | null, album: Album | null }>({
         x: 0,
         y: 0,
@@ -23,12 +20,15 @@ const AlbumList: React.FC = () => {
         album: null
     });
 
+    const contextMenuWidth: number = addAlbums ? 90 : 115;
+
     const handleShowMenu = (event: React.MouseEvent, index: number, context: boolean = true) => {
         event.preventDefault(); 
 
         const target = event.currentTarget as HTMLElement;
         const rect = target.getBoundingClientRect();
-        const right = rect.right - 115;
+        const right = rect.right - contextMenuWidth;
+        
         setContextMenu({
             x: event.clientX > right ? right : event.clientX,
             y: context ? event.clientY : rect.bottom,
@@ -39,12 +39,17 @@ const AlbumList: React.FC = () => {
     };
 
     const handleRemoveAlbum = () => {
-        if (contextMenu.albumIndex !== null) {
-            // Logic to remove the song
-            albums = albums.filter((album) => album != contextMenu.album)
-
+        if (typeof contextMenu.album?.id === 'string') {
+            removeAlbum(contextMenu.album.id);
         }
         setContextMenu({ ...contextMenu, visible: false });
+    };
+
+    const handleAddAlbum = async (): Promise<void> => {
+        if (contextMenu.album) {
+            addAlbum(contextMenu.album);
+        }
+        setContextMenu({ album: null, albumIndex: null, visible: false, x: 0, y: 0 });
     };
 
     const handleClickOutside = () => {
@@ -70,31 +75,41 @@ const AlbumList: React.FC = () => {
     }, []);
 
     return (
-        <div className="list">
+        <div className="list" style={{ height: `calc(100vh - ${subtractFromHeight}px)` }}>
             {albums.map((album: Album, index: number) => (
                 <div key={index} 
                      className={`card ${contextMenu.albumIndex === index ? "context-menu-active" : ""}`}
                      onContextMenu={(e) => handleShowMenu(e, index)}>
 
-                    <a href={album.albumLink} target="_blank" rel="noopener noreferrer">
-                        <img src={album.albumArt} alt={`${album.title} Album Art`} className="card-art" />
+                    <a href={album.link} target="_blank" rel="noopener noreferrer">
+                        <img src={album.image} alt={`${album.title} Album Art`} className="card-art" />
                     </a>
 
-                    <a href={album.albumLink} target="_blank" className="card-title">{album.title}</a>
-                    <a href={album.artist_link} target="_blank" className="card-subtitle">{album.artist}</a>
+                    <a href={album.link} target="_blank" className="card-title">{album.title}</a>
+                    
+                    <div className="card-subtitle">
+                        {album.artists?.map((artist, index) => (
+                            <span key={artist.id} className="card-artist">
+                                <a href={artist.link} target="_blank" rel="noopener noreferrer">
+                                    {artist.name}
+                                </a>
+                                {index < album.artists!.length - 1 && ', '}
+                            </span>
+                        ))}
+                    </div>
 
                     <div className="card-bottom-container">
                         <div className="card-sub-subtitle">
-                            <a href={album.albumLink} target="_blank" rel="noopener noreferrer">
+                            <a href={album.link} target="_blank" rel="noopener noreferrer">
                                 <img src="/Spotify_Icon_RGB_White.png" alt="Spotify" className="card-spotify-icon" />
                             </a>
                             {album.year}
                         </div>
                         <button onClick={(e) => { 
-                                                // Stop event from bubbling up to row
-                                                e.stopPropagation(); 
-                                                handleShowMenu(e, index, false);
-                                                }}>
+                                            // Stop event from bubbling up to row
+                                            e.stopPropagation(); 
+                                            handleShowMenu(e, index, false);
+                                        }} className="dots-button">
                             <img src="/dots.png" alt="Options" className="dots"/>
                         </button>
                     </div>
@@ -106,7 +121,9 @@ const AlbumList: React.FC = () => {
             
             {contextMenu.visible && (
                 <div className="context-menu" style={{ top: contextMenu.y, left: contextMenu.x }}>
-                    <button onClick={handleRemoveAlbum}>Remove Album</button>
+                    <button onClick={addAlbums ? handleAddAlbum : handleRemoveAlbum}>
+                    {addAlbums ? 'Like Album' : 'Remove Album'}
+                    </button>
                 </div>
             )}
         </div>

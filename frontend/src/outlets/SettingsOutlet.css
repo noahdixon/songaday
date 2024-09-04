@@ -1,0 +1,67 @@
+.settings-container {
+    padding: 15px;
+}
+
+/* Media query to reduce padding if window is small */
+@media (max-width: 680px) {
+    .settings-container {
+        padding: 0;
+    }
+}
+
+.settings-inside-container {
+    max-width: 700px;
+}
+
+.settings-frequency-container {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 8px;
+}
+
+/* Remove the blue outline and box-shadow when the select is focused or active */
+.settings-dropdown:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.settings-switch-container {
+    display: flex;
+    align-items: center;
+}
+
+.settings-switch {
+    display: flex;
+}
+
+.settings-switch-text {
+    margin-left: 10px;
+}
+
+.settings-title {
+    font-size: 15px;
+}
+
+.settings-switch-title {
+    margin-bottom: 5px;
+}
+
+.settings-title-disabled {
+    color: var(--grey);
+}
+
+.settings-subtitle {
+    font-size: 13px;
+    color: var(--grey);
+}
+
+.settings-subtitle-link {
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+.settings-line {
+    border: 0.8px solid var(--grey-darker);
+    margin: 20px 0;
+}

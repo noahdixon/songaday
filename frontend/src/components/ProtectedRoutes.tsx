@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 
 export const LoggedInRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
     const { isLoggedIn } = useAuth();
-    return isLoggedIn ? element : <Navigate to="/login" replace />;
+    return isLoggedIn ? element : <Navigate to="/auth/login" replace />;
 };
 
 export const LoggedOutRoute: React.FC<ProtectedRouteProps> = ({ element }) => {

@@ -1,4 +1,4 @@
-import axios, { InternalAxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { AuthServiceResponse, refreshToken, logout } from './authService';
 import { setIsLoggedIn } from './authStateService';
 import { toast } from 'react-toastify';
@@ -28,6 +28,10 @@ api.interceptors.request.use(
 
 // Response interceptor for handling errors
 api.interceptors.response.use(
+    (response) => {
+        console.log(response)
+        return response;
+    },
     async (error: any) => {
         const originalRequest = error.config;
         if (error.response?.data?.error === "INVALID_ACCESS_TOKEN" && !originalRequest._retry) {

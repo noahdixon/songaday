@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { isAccessPayload } from '../services/AuthService';
 import jwt from 'jsonwebtoken';
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 /**
  * Middleware function to authenticate a JWT access token from the request header and extract the userId to the request.

@@ -9,8 +9,12 @@
     --purple-background-color-light: rgba(87, 65, 81, 0.93);
     --purple-background-color-lightest: rgba(107, 85, 101, 0.93);
     --pink-color: rgb(255, 183, 255);
+    --pink-color-faded: rgba(255, 183, 255, 0.737);
     --pink-color-highlight: rgba(255, 245, 255, 0.15);
     --grey: rgba(240, 248, 255, 0.572);
+    --grey-light: rgba(240, 248, 255, 0.838);
+    --grey-darker: rgba(255, 240, 255, 0.33);
+    --toastify-toast-min-height: 30px;
 }
 
 * {
@@ -21,8 +25,8 @@
 /* Scrollbar */
 /* Firefox */
 * {
-scrollbar-width: auto;
-scrollbar-color: var(--purple-background-color-highlight) var(--purple-background-color);
+    scrollbar-width: auto;
+    scrollbar-color: var(--pink-color) transparent;
 }
 
 /* Chrome, Edge, and Safari */
@@ -31,15 +35,23 @@ width: 16px;
 }
 
 *::-webkit-scrollbar-track {
-background: #ffffff;
+    background: #ffffff;
 }
 
 *::-webkit-scrollbar-thumb {
-background-color: #8f54a0;
-border-radius: 10px;
-border: 3px solid #ffffff;
+    background-color: var(--pink-color);
+    border-radius: 10px;
+    border: 3px solid #ffffff;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow-y: hidden;
+}
+
+
+a {color: aliceblue;}
 a:visited { color: aliceblue; }
 a:focus { color: aliceblue; }
 a:active { color: aliceblue; }
@@ -52,6 +64,12 @@ body {
     color: aliceblue;
 }
 
+/* Remove default header styling */
+h1,h2,h3,h4,h5,h6 {
+    margin:0;
+    padding:0;
+}
+
 /* Remove default button styling */
 button {
     all: unset; /* Remove all inherited and default styles */
@@ -62,4 +80,21 @@ button {
 .Toastify__toast {
     border-radius: 8px;
     background-color: var(--purple-background-color-highlight);
+    font-family: 'Roboto', Arial, sans-serif;
+    font-weight: 500;
+}
+
+.app-container {
+    background-image: url("../public/wallpaper.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.no-scroll {
+    overflow-y: hidden; /* or any other value you want */
 }

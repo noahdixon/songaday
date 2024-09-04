@@ -1,15 +1,17 @@
 import { Request, Response } from 'express';
-import { Album } from '../dtos/Album';
-import { Artist } from '../dtos/Artist';
-import { Song } from '../dtos/Song';
+import { Album } from '@shared/dtos/Album';
+import { Artist } from '@shared/dtos/Artist';
+import { Song } from '@shared/dtos/Song';
 import { searchContent as spotifySearchContent } from '../services/SpotifyService';
+import { Entity } from '@shared/dtos/Entity';
 
-const mapSong = (track: any): Song => {
+export const mapSong = (track: any): Song => {
     return {
         id: track.id,
         link: track.external_urls.spotify,
         title: track.name,
         artists: track.artists.map((artist: any) => ({
+            id: artist.id,
             name: artist.name,
             link: artist.external_urls.spotify
         })),
@@ -22,12 +24,13 @@ const mapSong = (track: any): Song => {
     } as Song;
 }
 
-const mapAlbum = (album: any): Album => {
+export const mapAlbum = (album: any): Album => {
     return {
         id: album.id,
         link: album.external_urls.spotify,
         title: album.name,
         artists: album.artists.map((artist: any) => ({
+            id: artist.id,
             name: artist.name,
             link: artist.external_urls.spotify
         })),
@@ -36,7 +39,7 @@ const mapAlbum = (album: any): Album => {
     } as Song;
 }
 
-const mapArtist = (artist: any): Artist => {
+export const mapArtist = (artist: any): Artist => {
     return {
         id: artist.id,
         link: artist.external_urls.spotify,
@@ -47,7 +50,7 @@ const mapArtist = (artist: any): Artist => {
 
 export const searchContent = async (req: Request, res: Response): Promise<Response> => {
     const query: string | undefined = req.body.query;
-    const entity: string | undefined = req.body.entity;
+    const entity: Entity | undefined = req.body.entity;
     
     // Check that query and entity were passed correctly
     if (!query) {
@@ -55,9 +58,6 @@ export const searchContent = async (req: Request, res: Response): Promise<Respon
     }
     if (!entity) {
         return res.status(400).json({ error: "Entity string is required." });
-    }
-    if (!["track", "album", "artist"].includes(entity)) {
-        return res.status(400).json({ error: "Entity must be track, album, or artist." });
     }
 
     // Search using API
@@ -71,7 +71,7 @@ export const searchContent = async (req: Request, res: Response): Promise<Respon
         // Map over tracks and create array of Song objects
         let content = null;
         switch (entity) {
-            case "track":
+            case "song":
                 content = searchResult.data.tracks.items.map(mapSong);
                 break;
             case "album":

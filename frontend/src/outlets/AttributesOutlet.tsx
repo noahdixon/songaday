@@ -1,7 +1,7 @@
 const AttributesOutlet: React.FC = () => {
 
     return (
-        <div>Attributes</div>
+        <div className="loader">Coming Soon 🤠</div>
     );
 }
 

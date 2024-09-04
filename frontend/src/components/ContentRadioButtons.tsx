@@ -2,23 +2,25 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import './ContentRadioButtons.css';
 
-const ContentRadioButtons: React.FC = () => {
+interface ContentRadioButtonsProps {
+    setEntity: (newEntity: string) => void;
+}
 
-    const [selected, setSelected] = useState<string | null>(null);
+const ContentRadioButtons: React.FC<ContentRadioButtonsProps> = ({ setEntity }) => {
+    const [selected, setSelected] = useState<string>("songs");
     const location = useLocation();
 
     useEffect(() => {
         const pathname = location.pathname;
         const segments = pathname.split('/');
-        setSelected(segments[2]);
+        const currentPath = segments[2];
+        setSelected(currentPath);
+        setEntity(currentPath);
     }, [location.pathname]);
 
     return (
         <div>
             <div className="content-radio-container">
-                <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">
-                    <img src="/Spotify_Logo_RGB_White.png" alt="Spotify Logo" className="spotify-radio-logo spotify-logo"/>
-                </a>
                 <Link to="songs" className={`content-radio-item ${selected === 'songs' ? 'selected' : ''}`}>
                     Songs
                 </Link>

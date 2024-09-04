@@ -5,7 +5,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center ; /* Vertically centers items if they have different heights */
-    padding: 14px 20px; /* Adds space inside the div (10px top/bottom, 20px left/right) */
+    padding: 14px 20px;
     margin: 20px; /* Adds space around the div */
     border-radius: 15px; /* Optional rounded corners */
 }
@@ -16,7 +16,7 @@
 }
 
 .logo {
-    height: 30px; /* Adjust height as needed */
+    height: 30px;
     margin-bottom: -3px;
 }
 
@@ -31,18 +31,18 @@
     margin-bottom: -3px;
 }
 
-.dropdown-menu {
+.header-dropdown-menu {
     position: absolute;
     top: 160%;
     right: -20px;
-    background-color: var(--purple-background-color);
+    background-color: var(--purple-background-color-highlight);
     border-radius: 8px;
     z-index: 1000;
     display: flex;
     flex-direction: column;
 }
 
-.dropdown-item {
+.header-dropdown-item {
     padding: 10px 20px;
     white-space: nowrap; 
     display: block;
@@ -53,16 +53,16 @@
     transition: 100ms ease;
 }
 
-.dropdown-item-top {
+.header-dropdown-item-top {
     border-radius: 8px 8px 0 0;
 }
 
-.dropdown-item-bottom {
+.header-dropdown-item-bottom {
     border-radius: 0 0 8px 8px;
 }
 
 
-.dropdown-item:hover {
-    background-color: var(--purple-background-color-highlight);
+.header-dropdown-item:hover {
+    background-color: var(--purple-background-color-light);
     color: var(--pink-color);
 }

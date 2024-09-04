@@ -3,12 +3,11 @@
 }
 
 table {
-    margin-top: 15px;
     width: 100%;
     border-collapse: collapse;
     display: block;
-    height: calc(100vh - 226px); 
-    overflow-y: auto;  
+    height: max-content;
+    overflow-y: auto;
     overflow-x: hidden; 
 }
 
@@ -18,10 +17,6 @@ a,.song-entry {
 
 .song-entry:hover, .song-entry.context-menu-active {
     background-color: var(--purple-background-color-highlight);
-}
-
-a:hover {
-    color: var(--pink-color);
 }
 
 thead {
@@ -105,8 +100,7 @@ td:nth-child(8) {
 }
 
 .line {
-    border-color: var(--pink-color);
-    background-color: var(--pink-color);
+    border: 0.8px solid var(--pink-color);
     padding: 0;
     position: sticky;
 }
@@ -142,6 +136,17 @@ td:nth-child(8) {
 .artist {
     color: var(--grey);
     font-weight: 400;
+    display: inline;
+}
+
+.artist a {
+    color: var(--grey);
+    font-weight: 400;
+    display: inline;
+}
+
+a:hover {
+    color: var(--pink-color);
 }
 
 .title, .artist {
@@ -219,5 +224,9 @@ td:nth-child(8) {
 @media (max-width: 500px) {
     .num-col {
         display: none; /* Hide the sidebar */
+    }
+
+    th:nth-child(2) {
+        border-radius: 8px 0 0 8px;
     }
 }

@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from "express";
 import { Request, Response, NextFunction } from 'express';
 import cors from "cors";
@@ -7,6 +10,8 @@ import path from 'path';
 import { authenticateToken } from './middlewares/AuthMiddleware';
 import AuthRoutes from './routes/AuthRoutes';
 import { searchContent } from "./controllers/SpotifyController";
+import UserRoutes from './routes/UserRoutes';
+import { checkEntityBody } from './middlewares/EntityMiddleware';
 
 
 const app = express();
@@ -26,37 +31,9 @@ app.use(checkJSON);
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, '../../frontend/build')));
 
-interface Post {
-    userId: number;
-    message: string;
-}
-
-const posts: Post[] = [
-    {
-        userId: 5,
-        message: 'This is a post by the person with id 5'
-    },
-    {
-        userId: 6,
-        message: 'This is a post by the person with id 6'
-    },
-    {
-        userId: 7,
-        message: 'This is a post by the person with id 7'
-    },
-    {
-        userId: 7,
-        message: 'This is yet another post by the person with id 7'
-    },
-];
-
 app.use('/auth', AuthRoutes);
-// app.use('/search', authenticateToken, searchRoutes);
-app.post('/search', authenticateToken, searchContent);
-
-app.get('/posts', authenticateToken, (req: Request, res: Response): void => {
-    res.json(posts.filter(post => post.userId === req.userId));
-});
+app.post('/search', authenticateToken, checkEntityBody, searchContent);
+app.use('/user', authenticateToken, UserRoutes);
 
 // All other routes serve React app
 app.get('*', (req: Request, res: Response) => {
