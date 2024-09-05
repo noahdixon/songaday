@@ -13,7 +13,6 @@ import { searchContent } from "./controllers/SpotifyController";
 import UserRoutes from './routes/UserRoutes';
 import { checkEntityBody } from './middlewares/EntityMiddleware';
 
-
 const app = express();
 if (process.env.NODE_ENV === 'development') {
     app.use(cors({
@@ -29,7 +28,7 @@ app.use(cookieParser());
 app.use(checkJSON);
 
 // Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, '../../frontend/build')));
+app.use(express.static(path.join(__dirname, '../../../../frontend/build')));
 
 app.use('/auth', AuthRoutes);
 app.post('/search', authenticateToken, checkEntityBody, searchContent);
