@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+
 import { Entity } from '@shared/dtos/Entity';
 import api from "./api";
 
@@ -11,7 +11,7 @@ export interface SpotifyServiceResponse {
 export const search = async (query: string, entity: Entity): Promise<SpotifyServiceResponse> => {
     try {
         // Attempt search
-        const response: AxiosResponse = await api.post('/search', {query, entity});
+        const response = await api.post('/search', {query, entity});
         return { success: true, data: response.data }; 
 
     } catch (error: any) {
