@@ -233,22 +233,68 @@ export const searchContent = async (query: string, entity: Entity): Promise<Spot
     }
 };
 
+const getIdSplits = (ids: string[]): string[][] => {
+    const idSplits: string[][] = [];
+    for (let i = 0; i < ids.length; i += 20) {
+        idSplits.push(ids.slice(i, i + 20));
+    }
+
+    return idSplits;
+}
+
 export const getContent = async (contentIds: { songIds: string[], albumIds: string[], artistIds: string[] }): Promise<SpotifyServiceResponse> => {
     try {
-        // Send requests
-        const songPromises = contentIds.songIds.map((id: string) => spotifyApi.get(`/tracks/${id}`));
-        const albumPromises = contentIds.albumIds.map((id: string) => spotifyApi.get(`/albums/${id}`));
-        const artistPromises = contentIds.artistIds.map((id: string) => spotifyApi.get(`/artists/${id}`));
 
-        // Await responses
-        const songResponses = await Promise.all(songPromises);
-        const albumResponses = await Promise.all(albumPromises);
-        const artistResponses = await Promise.all(artistPromises);
+        const songs = [];
+        const albums = [];
+        const artists = [];
 
-        // Extract data field from responses
-        const songs = songResponses.map(response => response.data);
-        const albums = albumResponses.map(response => response.data);
-        const artists = artistResponses.map(response => response.data);
+        // Iterate over ID arrays and split in sub arrays of 20
+        const songIdSplits: string[][] = getIdSplits(contentIds.songIds);
+        const albumIdSplits: string[][] = getIdSplits(contentIds.albumIds);
+        const artistIdSplits: string[][] = getIdSplits(contentIds.artistIds);
+
+        // Request each batch of 20 songs and add to songs array
+        for (let i = 0; i < songIdSplits.length; i++) {
+            // Join ids
+            const idsParam = songIdSplits[i].join(',');
+
+            // Get songs from spotify
+            const songResponse: any = await spotifyApi.get(`/tracks?ids=${idsParam}`);
+            const tempSongs = songResponse.data?.tracks;
+            if (!tempSongs) {
+                return { success: false, code: 500, error: "Error retrieving content:" };
+            }
+            songs.push(...tempSongs);
+        }
+
+        // Request each batch of 20 albums and add to albums array
+        for (let i = 0; i < albumIdSplits.length; i++) {
+            // Join ids
+            const idsParam = albumIdSplits[i].join(',');
+
+            // Get albums from spotify
+            const albumResponse: any = await spotifyApi.get(`/albums?ids=${idsParam}`);
+            const tempAlbums = albumResponse.data?.albums;
+            if (!tempAlbums) {
+                return { success: false, code: 500, error: "Error retrieving content:" };
+            }
+            albums.push(...tempAlbums);
+        }
+
+        // Request each batch of 20 artists and add to artists array
+        for (let i = 0; i < artistIdSplits.length; i++) {
+            // Join ids
+            const idsParam = artistIdSplits[i].join(',');
+
+            // Get artists from spotify
+            const artistResponse: any = await spotifyApi.get(`/artists?ids=${idsParam}`);
+            const tempArtists = artistResponse.data?.artists;
+            if (!tempArtists) {
+                return { success: false, code: 500, error: "Error retrieving content:" };
+            }
+            artists.push(...tempArtists);
+        }
 
         // Return combined data
         return { 
