@@ -2,8 +2,6 @@ import axios from 'axios';
 import qs from 'qs';
 import { PrismaClient } from '@prisma/client';
 import { Entity } from '@shared/dtos/Entity';
-// import dotenv from 'dotenv';
-// dotenv.config();
 
 const prisma = new PrismaClient();
 
@@ -14,7 +12,8 @@ export interface SpotifyTokenServiceResponse {
     accessToken?: AccessToken
 }
 
-// #region Access Token
+// #region Axios
+let retryAfter: Date | null = null;
 
 interface AccessToken {
     token: string;
@@ -129,9 +128,35 @@ const spotifyApi = axios.create({
     baseURL: 'https://api.spotify.com/v1', // Spotify API base URL
 });
 
+/**
+ * Sleeps for a given number of milliseconds.
+ * @param ms - The number of milliseconds to sleep.
+ * @returns A promise that resolves after the given number of milliseconds.
+ */
+const sleep = (ms: number): Promise<void> => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Include access token in request headers
 spotifyApi.interceptors.request.use(
     async (config: any) => {
+        // Check if there is a retry after
+        if (retryAfter) {
+            const diffMilliseconds = retryAfter.getTime() - Date.now();
+            if (diffMilliseconds > 0) {
+                // Add seconds to the retryAfter
+                retryAfter.setSeconds(retryAfter.getSeconds() + 1);
+                // Sleep until old retryAfter is reached
+                console.log(`Waiting ${diffMilliseconds/1000} seconds before sending request`)
+                await sleep(diffMilliseconds);
+                console.log("Sending request again.");
+            } else {
+                // set retryAfter to null if it is later than the current time
+                console.log("Setting retryAfter to null.")
+                retryAfter = null;
+            }
+        }
+
         // Get token
         const response = await getAccessToken();
         if (!response.success) {
@@ -147,15 +172,6 @@ spotifyApi.interceptors.request.use(
     }
 );
 
-/**
- * Sleeps for a given number of milliseconds.
- * @param ms - The number of milliseconds to sleep.
- * @returns A promise that resolves after the given number of milliseconds.
- */
-function sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 // Add response interceptor for handling automatic access token refresh
 spotifyApi.interceptors.response.use(
     (response) => { 
@@ -163,6 +179,7 @@ spotifyApi.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
+        // Access error
         if (error.response?.status === 401 && !originalRequest._retry) {
             console.log("401 Error, Getting new access token.")
             // Handle refreshing access token and resending
@@ -170,8 +187,8 @@ spotifyApi.interceptors.response.use(
             // Attempt force token refresh
             const accessTokenResult: SpotifyTokenServiceResponse = await getAccessToken(true);
             if (accessTokenResult.success) {
-                // Update access token and resend request
-                originalRequest.headers['Authorization'] = `Bearer ${accessTokenResult.accessToken!.token}`;
+                // // Update access token and resend request
+                // originalRequest.headers['Authorization'] = `Bearer ${accessTokenResult.accessToken!.token}`;
 
                 console.log("Access Token updated. Resending request.")
                 return spotifyApi(originalRequest); 
@@ -179,22 +196,36 @@ spotifyApi.interceptors.response.use(
                 // Return error object if refresh failed
                 return Promise.reject(error);
             }
+
+        // 429 Rate limit error
+        } else if (error.response?.status === 429 && (!originalRequest._numRetries || originalRequest._numRetries < 4)) {
+            console.log("429 Error: Rate limit exceeded.");
+
+            if (!originalRequest._numRetries) {
+                originalRequest._numRetries = 1;
+            } else {
+                originalRequest._numRetries += 1;
+            }
+
+            // Set retryAfter with increasing buffer for backoff
+            // Calculate minimum milliseconds needed to wait
+            console.log(`requested wait time is: ${error.response.headers['retry-after']} seconds, numRetries = ${originalRequest._numRetries}`);
+            const minRetryTimeMs = Date.now() + (error.response.headers['retry-after'] || 30) * 1000;
+            // Compare min retry time to current retry time and take max, then add buffer seconds for exponential backoff
+            const newRetryTimeMs = Math.max(minRetryTimeMs, retryAfter ? retryAfter.getTime() : minRetryTimeMs) + ((originalRequest._numRetries-1) ** 2) * 1000;
+            // Set retryAfter object to new wait time
+            retryAfter = new Date(newRetryTimeMs);
+            return spotifyApi(originalRequest);
+
+        // 504 Gateway error
         } else if (error.response?.status === 504 && !originalRequest._retry) {
             console.log("504 Error, trying again after 2 seconds");
             await sleep(2000);
             originalRequest._retry = true;
             return spotifyApi(originalRequest);
-        } else if (error.response?.status === 429 && !originalRequest._retry) {
-            // Handle 429 rate limit error
-            console.log("429 Error: Rate limit exceeded.");
-            const retryAfter = error.response.headers['retry-after'] || 30;
-            console.log(`Waiting ${retryAfter} seconds and retrying request.`);
-            await sleep(retryAfter * 1000); // Wait before retrying
-            originalRequest._retry = true;
-            return spotifyApi(originalRequest);
         }
 
-        // Handle other errors
+        // Other errors
         console.error(`Spotify request error: code ${error.code}`, error);
         return Promise.reject(error);
     }
