@@ -348,3 +348,33 @@ export const getContent = async (contentIds: { songIds: string[], albumIds: stri
         return { success: false, code: 500, error: "Error retrieving content:" };
     }
 }
+
+export const getRecommendation = async (contentIds: { songIds: string[], artistIds: string[] }): Promise<SpotifyServiceResponse> => {
+    try {
+        if (!contentIds.songIds.length && !contentIds.artistIds.length) {
+            return { success: false, code: 500, error: "Must pass at least one song or artist." };
+        }
+
+        if (contentIds.songIds.length + contentIds.artistIds.length > 5) {
+            return { success: false, code: 500, error: "Too much content. Expected a maximium of 5 songs and artists combined." };
+        }
+
+        const response: any = await spotifyApi.get(`/recommendations?limit=1&market=US&seed_artists=${contentIds.artistIds.join(',')}&seed_tracks=${contentIds.songIds.join(',')}`);
+
+        if (!response?.data?.tracks?.length) {
+            return { success: false, code: 400, error: "Spotify could not find a recommendation." };
+        }
+        
+        return { success: true, data: response.data.tracks[0]};
+        
+    } catch (error: any) {
+        // Log any errors
+        console.error("Error retrieving content:", error);
+
+        if (error.response?.status === 429) {
+            return { success: false, code: 429, error: "SPOTIFY_RATE_LIMITED" };
+        }
+
+        return { success: false, code: 500, error: "Error retrieving content:" };
+    }
+}

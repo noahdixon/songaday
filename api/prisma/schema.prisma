@@ -33,6 +33,7 @@ model User {
   songLikes     SongLike[]    // Relation to the SongLike table
   albumLikes    AlbumLike[]   // Relation to the SongLike table
   artistLikes   ArtistLike[]  // Relation to the SongLike table
+  songRecs      SongRec[]     // Relation to the SongRec table
   sendEmails    Boolean       @default(true)
   sendTexts     Boolean       @default(true)
   frequency     Frequency     @default(DAILY)
@@ -70,4 +71,12 @@ model ArtistLike {
   artistId    String       
   user        User         @relation(fields: [userId], references: [id]) // Reference to user
   @@id([userId, artistId])   // Composite primary key
+}
+
+model SongRec {
+  userId      Int          // Foreign key referencing User
+  songId      String       
+  user        User         @relation(fields: [userId], references: [id]) // Reference to user
+  date        DateTime     @default(now())
+  @@id([userId, songId])   // Composite primary key
 }

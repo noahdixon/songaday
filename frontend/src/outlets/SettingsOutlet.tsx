@@ -70,7 +70,7 @@ const SettingsOutlet: React.FC = () => {
         { value: "DAILY", label: "Once per day", note: "Recommendations will be delivered once per day at 12 PM EST." },
         { value: "THRICE_WEEKLY", label: "Three times per week", note: "Recommendations will be delivered on Mondays, Wednesdays, and Fridays at 12 PM EST." },
         { value: "WEEKLY", label: "Once per week", note: "Recommendations will be delivered every Friday at 12 PM EST." },
-        { value: "BIWEEKLY", label: "Once every two weeks", note: "Recommendations will be delivered every other Friday at 12 PM EST." },
+        { value: "BIWEEKLY", label: "Twice per Month", note: "Recommendations will be delivered on the first and third Friday of each month at 12 PM EST." },
         { value: "MONTHLY", label: "Once per Month", note: "Recommendations will be delivered on the first Friday of each month at 12 PM EST." }
     ];
 
