@@ -36,7 +36,7 @@ app.use('/user', authenticateToken, UserRoutes);
 
 // All other routes serve React app
 app.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../../../../frontend/build', 'index.html'));
 });
 
 app.listen(process.env.PORT);
