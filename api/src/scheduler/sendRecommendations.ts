@@ -102,7 +102,7 @@ const getRecommendations = async () => {
         // Filter out users with no likes
         users = users.filter(user => 
             user.songLikes.length > 0 || 
-            // user.albumLikes.length > 0 || 
+            user.albumLikes.length > 0 || 
             user.artistLikes.length > 0
         );
 
@@ -112,37 +112,22 @@ const getRecommendations = async () => {
             // Get user
             const user = users[i];
 
-            // Determine seed numbers
-            let numSongSeeds = 3;
-            let numArtistSeeds = 2;
-            if (user.songLikes.length < 3) {
-                numSongSeeds = user.songLikes.length;
-                numArtistSeeds = 5 - numSongSeeds;
-            } else if (user.artistLikes.length < 2) {
-                numArtistSeeds = user.artistLikes.length;
-                numSongSeeds = 5 - numArtistSeeds;
-            }
+            // Select 5 random seeds from user liked content:
+            const combinedLikes = [...user.songLikes, ...user.albumLikes, ...user.artistLikes];
+            const selectedLikes = combinedLikes.sort(() => 0.5 - Math.random()).slice(0,5);
 
-            // Get numSongSeeds random songs from their likes
-            const shuffledSongs = user.songLikes.sort(() => 0.5 - Math.random());
-            const selectedSongs = shuffledSongs.slice(0, numSongSeeds);
-            const selectedSongIds = selectedSongs.map((song) => song.songId);
+            // Organize seeds into id arrays:
+      
+            const songIds = selectedLikes.filter((item: any) => item.songId).map((item: any) => item.songId);
+            const albumIds = selectedLikes.filter((item: any) => item.albumId).map((item: any) => item.albumId);
+            const artistIds = selectedLikes.filter((item: any) => item.artistId).map((item: any) => item.artistId);
 
-            // Get numArtistSeeds random artists from their likes
-            const shuffledArtists = user.artistLikes.sort(() => 0.5 - Math.random());
-            const selectedArtists = shuffledArtists.slice(0, numArtistSeeds);
-            const selectedArtistIds = selectedArtists.map((artist) => artist.artistId);
-
-            // Get recommendation
-            // Attempt maximum 10 tries
+            // Get recommendation, attempt maximum 10 tries
             let recResponse: SpotifyServiceResponse = { success: false };
             let newSongRecommended: boolean = false;
             let song;
             for (let i = 0; i < 10; i++) {
-                recResponse = await getRecommendation({
-                    songIds: selectedSongIds,
-                    artistIds: selectedArtistIds
-                });
+                recResponse = await getRecommendation({ songIds, albumIds, artistIds });
                 if (!recResponse.success || !recResponse.data?.id) {
                     break;
                 }
@@ -225,7 +210,7 @@ const getRecommendations = async () => {
 }
 
 /**
- * Deletes all recommendations from the database that are older that 31 days old.
+ * Deletes all recommendations from the database that are more than 31 days old.
  */
 const removeOldRecommendations = async () => {
     try {

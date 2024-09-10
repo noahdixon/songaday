@@ -364,17 +364,41 @@ export const getContent = async (contentIds: { songIds: string[], albumIds: stri
     }
 }
 
-export const getRecommendation = async (contentIds: { songIds: string[], artistIds: string[] }): Promise<SpotifyServiceResponse> => {
+export const getRecommendation = async (contentIds: { songIds: string[], albumIds: string[], artistIds: string[] }): Promise<SpotifyServiceResponse> => {
     try {
-        if (!contentIds.songIds.length && !contentIds.artistIds.length) {
-            return { success: false, code: 500, error: "Must pass at least one song or artist." };
-        }
-
-        if (contentIds.songIds.length + contentIds.artistIds.length > 5) {
+        if (contentIds.songIds.length + contentIds.albumIds.length + contentIds.artistIds.length > 5) {
             return { success: false, code: 500, error: "Too much content. Expected a maximium of 5 songs and artists combined." };
         }
 
-        const response: any = await spotifyApi.get(`/recommendations?limit=1&market=US&seed_artists=${contentIds.artistIds.join(',')}&seed_tracks=${contentIds.songIds.join(',')}`);
+        const songIds = contentIds.songIds;
+        const artistIds = contentIds.artistIds;
+
+        // Get a random song from each album:
+        let albumTrackIds: string[] = [];
+        for (let i = 0; i < contentIds.albumIds.length; i++) {
+            // Get songs from album
+            const album: any = await spotifyApi.get(`/albums/${contentIds.albumIds[i]}`);
+            if (!album?.data?.tracks?.items?.length) {
+                console.log("No tracks on this album.")
+                continue;
+            }
+            const tracks = album.data.tracks.items;
+
+            // Select random song
+            const selectedTrack = tracks[Math.floor(Math.random() * tracks.length)];
+            if (selectedTrack.id) {
+                // Add song to songIds
+                songIds.push(selectedTrack.id);
+            }
+        }
+
+        // Check that there is at least one track or artist seed
+        if (!songIds && !artistIds) {
+            return { success: false, code: 500, error: "Must pass at least one song or artist." };
+        }
+
+        // Get recommendation
+        const response: any = await spotifyApi.get(`/recommendations?limit=1&market=US&seed_artists=${artistIds.join(',')}&seed_tracks=${songIds.join(',')}`);
 
         if (!response?.data?.tracks?.length) {
             return { success: false, code: 400, error: "Spotify could not find a recommendation." };
