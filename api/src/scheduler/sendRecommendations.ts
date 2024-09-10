@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { PrismaClient, Frequency } from '@prisma/client';
 import { getRecommendation, SpotifyServiceResponse } from "../services/SpotifyService";
+import { sendRecommendationEmail } from '../services/EmailService';
 
 const prisma = new PrismaClient();
 
@@ -136,18 +137,27 @@ const getRecommendations = async () => {
             // Attempt maximum 10 tries
             let recResponse: SpotifyServiceResponse = { success: false };
             let newSongRecommended: boolean = false;
+            let song;
             for (let i = 0; i < 10; i++) {
                 recResponse = await getRecommendation({
                     songIds: selectedSongIds,
                     artistIds: selectedArtistIds
                 });
-                if (!recResponse.success) {
+                if (!recResponse.success || !recResponse.data?.id) {
                     break;
                 }
-                const song = recResponse.data;
+                song = recResponse.data;
                 
-                // Check if song rec already exists
+                // Check if song rec already exists or if song is in likes
                 const existingRec = await prisma.songRec.findUnique({
+                    where: {
+                        userId_songId: {
+                            userId: user.id,
+                            songId: song.id
+                        }
+                    }
+                });
+                const existingSong = await prisma.songLike.findUnique({
                     where: {
                         userId_songId: {
                             userId: user.id,
@@ -157,7 +167,7 @@ const getRecommendations = async () => {
                 });
 
                 // Retry loop if song already exists
-                if (existingRec) {
+                if (existingRec || existingSong) {
                     continue;
                 }
 
@@ -185,10 +195,24 @@ const getRecommendations = async () => {
                 continue;
             }
 
-            // Send email and text
-            if (user.sendEmails) {
-                
+            // Get song title and artists
+            const title: string = song.name || "No Title";
+            const artist: string = song.artists
+            ? song.artists.map((artist: any) => artist.name ? artist.name : "No Name").join(', ')
+            : "No Artist";
+            const link: string = song.external_urls?.spotify || "https://open.spotify.com/";
+
+            // Send email
+            if (user.sendEmails && user.email) {
+                await sendRecommendationEmail(
+                    user.email, 
+                    title, 
+                    artist, 
+                    link
+                );
             }
+
+            // Send text
             if (user.sendTexts) {
                 
             }
@@ -229,7 +253,9 @@ const removeOldRecommendations = async () => {
  */
 const main = async () => {
     await getRecommendations();
+    console.log("All new recommendations sent");
     await removeOldRecommendations();
+    console.log("All old recommendations removed");
 }
 
 main();

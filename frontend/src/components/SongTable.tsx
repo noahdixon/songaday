@@ -7,9 +7,10 @@ interface SongTableProps {
     songs: Song[],
     addSongs: boolean,
     subtractFromHeight: number
+    isRecommendations?: boolean
 }
 
-const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFromHeight }) => {
+const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFromHeight, isRecommendations=false }) => {
     const { addSong, removeSong } = useUserContent();
 
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; songIndex: number | null, song: Song | null }>({
@@ -79,11 +80,12 @@ const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFro
             <table style={{ height: `calc(100vh - ${subtractFromHeight}px)` }}>
                 <thead>
                     <tr>
-                        <th className="num-col first-head">#</th>
+                        {!isRecommendations && <th className="num-col first-head">#</th>}
+                        {isRecommendations && <th className="num-col first-head">Date</th>}
                         <th><div className="song-spotify-icon" /></th>
                         <th><div className="song-album-art" /></th>
                         <th>Title</th>
-                        <th>Album</th>
+                        <th className="album-col">Album</th>
                         <th className="year-col">Year</th>
                         <th className="popularity-col">Popularity</th>
                         <th className="last-head"></th>
@@ -102,7 +104,8 @@ const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFro
                             className={`song-entry ${contextMenu.songIndex === index ? "context-menu-active" : ""}`}
                             onContextMenu={(e) => handleShowMenu(e, index)}
                             >
-                            <td className="num-col">{index+1}</td>
+                            {!isRecommendations && <td className="num-col">{index+1}</td> }
+                            {isRecommendations && <td className="num-col">{song.recDate ? song.recDate : "No Date"}</td> }
                             <td>
                                 <a href={song.link} target="_blank" className="title">
                                     <img src="/Spotify_Icon_RGB_White.png" alt="Spotify" className="song-spotify-icon" />
@@ -127,7 +130,7 @@ const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFro
                                     </div>
                                 </div>
                             </td>
-                            <td><a href={song.albumLink} target="_blank">{song.album}</a></td>
+                            <td className="album-col"><a href={song.albumLink} target="_blank">{song.album}</a></td>
                             <td className="year-col">{song.year}</td>
                             <td className="popularity-col">{song.popularity}</td>
                             <td className="dots-cell">

@@ -66,14 +66,35 @@ export const getContent = async (req: Request, res: Response): Promise<Response>
         return res.status(401).json({ error: "User not authenticated." });
     }
     
-    // Get ids of all user liked content
+    // Get ids of all user content
     const userContentResponse: UserDataServiceResponse = await userGetContent(userId);
     if(!userContentResponse.success) {
         return res.status(userContentResponse.code!).json({ error: userContentResponse.error! });
     }
-    const contentIds: { songIds: string[], albumIds: string[], artistIds: string[] } = userContentResponse.data;
 
-    // Get raw data
+    // Create hashmap to map recommended songs to their dates
+    const songRecIdsAndDates: { songId: string, date: Date }[] = userContentResponse.data.songRecIdsAndDates;
+    const songRecIdToDateMap: { [key: string]: Date } = {};
+
+    // Populate hashmap
+    songRecIdsAndDates.forEach(({ songId, date }) => {
+        songRecIdToDateMap[songId] = date;
+    });
+
+    // Get content data from Spotify
+    const contentIds: { 
+        songIds: string[], 
+        albumIds: string[], 
+        artistIds: string[], 
+        songRecIds: string[] } 
+        = {
+            songIds: userContentResponse.data.songIds,
+            albumIds: userContentResponse.data.albumIds,
+            artistIds: userContentResponse.data.artistIds,
+            songRecIds: userContentResponse.data.songRecIdsAndDates.map((item: { songId: string, date: Date }) => item.songId)
+        };
+
+
     const dataRespose: SpotifyServiceResponse = await spotifyGetContent(contentIds);
 
     if (!dataRespose.success) {
@@ -84,9 +105,23 @@ export const getContent = async (req: Request, res: Response): Promise<Response>
     const songs: Song[] =  dataRespose.data.songs.map(mapSong);
     const albums: Album[] = dataRespose.data.albums.map(mapAlbum);
     const artists: Artist[] = dataRespose.data.artists.map(mapArtist);
+    let songRecs: Song[] = dataRespose.data.songRecs.map(mapSong);
+    
+    // Add date strings to song recommendations 
+    songRecs.forEach((song: Song) => {
+        const recDate = songRecIdToDateMap[song.id];
+        if (recDate) {
+            // Format date as MM/DD/YYYY
+            song.recDate = recDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+            });
+        }
+    });
 
     // Send data
-    return res.status(200).json({ songs, albums, artists });
+    return res.status(200).json({ songs, albums, artists, songRecs });
 };
 
 export const getDeliverySettings = async (req: Request, res: Response): Promise<Response> => {

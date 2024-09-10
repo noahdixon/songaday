@@ -5,6 +5,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getContent, likeContent, removeContent, UserServiceResponse } from "../services/userService";
 
+const maxNumSongs: number = 80;
+const maxNumAlbums: number = 40;
+const maxNumArtists: number = 40;
+
 interface UserContentContextType {
     songs: Song[];
     addSong: (song: Song) => void;
@@ -15,6 +19,7 @@ interface UserContentContextType {
     artists: Artist[];
     addArtist: (artist: Artist) => void;
     removeArtist: (artistId: string) => void;
+    songRecs: Song[];
     isLoaded: boolean;
     errorMessage: string | null;
 }
@@ -31,8 +36,9 @@ export const useUserContent = () => {
 
 export const UserContentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [songs, setSongs] = useState<Song[]>([]);
-    const [artists, setArtists] = useState<Artist[]>([]);
     const [albums, setAlbums] = useState<Album[]>([]);
+    const [artists, setArtists] = useState<Artist[]>([]);
+    const [songRecs, setSongRecs] = useState<Song[]>([]);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -56,6 +62,7 @@ export const UserContentProvider: React.FC<{ children: React.ReactNode }> = ({ c
                 setSongs(getContentResponse.data.songs);
                 setAlbums(getContentResponse.data.albums);
                 setArtists(getContentResponse.data.artists);
+                setSongRecs(getContentResponse.data.songRecs);
 
                 setIsLoaded(true); // End loading
 
@@ -68,6 +75,12 @@ export const UserContentProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }, []);
 
     const addSong = async (song: Song) => {
+        // Check if song likes are full
+        if (songs.length >= maxNumSongs) {
+            toast.error("You have reached the maximum number of liked songs. Remove at least one to like more.");
+            return;
+        }
+
         // Add song to likes on db
         const response: UserServiceResponse = await likeContent(song.id, "song");
         if (!response.success) {
@@ -93,6 +106,12 @@ export const UserContentProvider: React.FC<{ children: React.ReactNode }> = ({ c
     };
 
     const addAlbum = async (album: Album) => {
+        // Check if album likes are full
+        if (albums.length >= maxNumAlbums) {
+            toast.error("You have reached the maximum number of liked albums. Remove at least one to like more.");
+            return;
+        }
+
         // Add album to likes on db
         const response: UserServiceResponse = await likeContent(album.id, "album");
         if (!response.success) {
@@ -118,6 +137,12 @@ export const UserContentProvider: React.FC<{ children: React.ReactNode }> = ({ c
     };
 
     const addArtist = async (artist: Artist) => {
+        // Check if album likes are full
+        if (artists.length >= maxNumArtists) {
+            toast.error("You have reached the maximum number of liked artists. Remove at least one to like more.");
+            return;
+        }
+
         // Add artist to likes on db
         const response: UserServiceResponse = await likeContent(artist.id, "artist");
         if (!response.success) {
@@ -153,6 +178,7 @@ export const UserContentProvider: React.FC<{ children: React.ReactNode }> = ({ c
             artists,
             addArtist,
             removeArtist,
+            songRecs,
             isLoaded,
             errorMessage
         }}>

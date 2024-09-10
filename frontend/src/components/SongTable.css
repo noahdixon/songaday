@@ -157,10 +157,10 @@ a:hover {
     max-width: min-content;
 }
 
-/* Media query to hide popularity column */
+/* Media query to hide popularity and year columns */
 @media (max-width: 1200px) {
-    .popularity-col {
-        display: none; /* Hide the sidebar */
+    .popularity-col, .year-col {
+        display: none; 
     }
 
     th:nth-child(2),td:nth-child(2) {
@@ -191,10 +191,10 @@ a:hover {
     }
 }
 
-/* Media query to hide year column */
+/* Media query to hide album column */
 @media (max-width: 900px) {
-    .year-col {
-        display: none; /* Hide the sidebar */
+    .album-col {
+        display: none; 
     }
 
     th:nth-child(2),td:nth-child(2) {
@@ -210,7 +210,7 @@ a:hover {
     }
     
     th:nth-child(4),td:nth-child(4) {
-        width: 50%;
+        width: 70%;
         max-width: 0;
     }
     
@@ -223,7 +223,7 @@ a:hover {
 /* Media query to hide number column */
 @media (max-width: 500px) {
     .num-col {
-        display: none; /* Hide the sidebar */
+        display: none;
     }
 
     th:nth-child(2) {

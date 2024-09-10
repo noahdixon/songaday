@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import { Prisma, PrismaClient, Frequency } from '@prisma/client';
-import crypto from 'crypto'; 
 import { Entity } from '@shared/dtos/Entity';
 
 const prisma = new PrismaClient();
@@ -170,6 +169,13 @@ export const getContent = async (userId: number): Promise<UserDataServiceRespons
             select: { artistId: true },
         });
 
+        // Get recommended song IDs
+        const songRecIdsAndDates = await prisma.songRec.findMany({
+            where: { userId },
+            select: { songId: true, date: true },
+            orderBy: { date: 'desc' }
+        });
+
         // Extract IDs from results
         const songIds = likedSongs.map(item => item.songId);
         const albumIds = likedAlbums.map(item => item.albumId);
@@ -181,7 +187,8 @@ export const getContent = async (userId: number): Promise<UserDataServiceRespons
             data: {
                 songIds,
                 albumIds,
-                artistIds
+                artistIds,
+                songRecIdsAndDates
             }
         };
         

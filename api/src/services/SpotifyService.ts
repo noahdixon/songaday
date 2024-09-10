@@ -83,7 +83,6 @@ const getAccessToken = async (forceFetch: boolean = false): Promise<SpotifyToken
             });
 
             if (response.status === 200 && response.data.access_token) {
-                console.log(response.data)
                 // Set access token in memory and database
                 accessToken = { 
                                 token: response.data.access_token, 
@@ -273,17 +272,18 @@ const getIdSplits = (ids: string[]): string[][] => {
     return idSplits;
 }
 
-export const getContent = async (contentIds: { songIds: string[], albumIds: string[], artistIds: string[] }): Promise<SpotifyServiceResponse> => {
+export const getContent = async (contentIds: { songIds: string[], albumIds: string[], artistIds: string[], songRecIds: string[] }): Promise<SpotifyServiceResponse> => {
     try {
-
         const songs = [];
         const albums = [];
         const artists = [];
+        const songRecs = [];
 
         // Iterate over ID arrays and split in sub arrays of 20
         const songIdSplits: string[][] = getIdSplits(contentIds.songIds);
         const albumIdSplits: string[][] = getIdSplits(contentIds.albumIds);
         const artistIdSplits: string[][] = getIdSplits(contentIds.artistIds);
+        const songRecIdSplits: string[][] = getIdSplits(contentIds.songRecIds);
 
         // Request each batch of 20 songs and add to songs array
         for (let i = 0; i < songIdSplits.length; i++) {
@@ -327,13 +327,28 @@ export const getContent = async (contentIds: { songIds: string[], albumIds: stri
             artists.push(...tempArtists);
         }
 
+        // Request each batch of 20 recommended songs and add to songRecs array
+        for (let i = 0; i < songRecIdSplits.length; i++) {
+            // Join ids
+            const idsParam = songRecIdSplits[i].join(',');
+
+            // Get recommended songs from spotify
+            const songRecResponse: any = await spotifyApi.get(`/tracks?ids=${idsParam}`);
+            const tempSongRecs = songRecResponse.data?.tracks;
+            if (!tempSongRecs) {
+                return { success: false, code: 500, error: "Error retrieving content:" };
+            }
+            songRecs.push(...tempSongRecs);
+        }
+
         // Return combined data
         return { 
             success: true, 
             data: { 
                 songs, 
                 albums, 
-                artists 
+                artists,
+                songRecs
             } 
         };
 

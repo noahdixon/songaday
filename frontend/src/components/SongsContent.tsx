@@ -1,28 +1,17 @@
 import { useUserContent } from "../context/UserContentContext";
-import { MoonLoader } from "react-spinners";
 import SongTable from "./SongTable";
 
 const SongsContent: React.FC = () => {
-    const { songs, isLoaded } = useUserContent();
+    const { songs } = useUserContent();
 
     return (
-        <div>
-            {isLoaded && <SongTable songs={songs} addSongs={false} subtractFromHeight={216}/>}
-            
-            {!isLoaded && 
-            <div className="loader">
-                
-                <div className="faded-text">Loading liked songs...</div>
-
-                <MoonLoader
-                    color={"var(--pink-color)"}
-                    loading={!isLoaded}
-                    size={40}
-                    aria-label="Loading Spinner"
-                    data-testid="moon-loader"
-                />
-            </div> 
-            }
+        <div className="outlet-component">
+            {songs.length > 0 && <SongTable songs={songs} addSongs={false} subtractFromHeight={216}/>}
+            {songs.length === 0 &&
+                <div className="faded-text loader">
+                    You haven't liked any songs yet.
+                </div>
+            }   
         </div>
     );
 }

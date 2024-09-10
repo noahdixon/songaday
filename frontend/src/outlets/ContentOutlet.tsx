@@ -6,7 +6,7 @@ const ContentOutlet: React.FC = () => {
     const [entity, setEntity] = useState<string>("songs");
 
     return (
-        <div>
+        <div className="outlet">
             <div className="top-section">
                 <div className="logo-radio">
                     <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">

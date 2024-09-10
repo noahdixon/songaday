@@ -11,4 +11,5 @@ export interface Song {
     popularity: number,
     explicit: boolean
     image: string
+    recDate?: string
 }
