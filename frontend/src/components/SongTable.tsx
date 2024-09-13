@@ -80,8 +80,8 @@ const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFro
         };
     }, []);
 
-    const height = isMobileView ? `calc(100vh - ${phoneSubtractFromHeight}px)`
-                                : `calc(100vh - ${subtractFromHeight}px)`;
+    const height = isMobileView ? `calc(100dvh - ${phoneSubtractFromHeight}px)`
+                                : `calc(100dvh - ${subtractFromHeight}px)`;
 
     return (
         <div>

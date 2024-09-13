@@ -79,8 +79,8 @@ const ArtistList: React.FC<ArtistListProps> = ({artists, addArtists=true, subtra
         };
     }, []);
 
-    const height = isMobileView ? `calc(100vh - ${phoneSubtractFromHeight}px)`
-                                : `calc(100vh - ${subtractFromHeight}px)`;
+    const height = isMobileView ? `calc(100dvh - ${phoneSubtractFromHeight}px)`
+                                : `calc(100dvh - ${subtractFromHeight}px)`;
 
     return (
         <div className="list" style={{ height }}>
