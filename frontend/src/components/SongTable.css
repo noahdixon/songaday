@@ -298,4 +298,8 @@ a:hover {
     thead {
         visibility: collapse;
     }
+
+    table { 
+        height: calc(100vh - 130px); 
+    }
 }

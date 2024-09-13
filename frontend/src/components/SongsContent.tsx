@@ -6,7 +6,10 @@ const SongsContent: React.FC = () => {
 
     return (
         <div className="outlet-component">
-            {songs.length > 0 && <SongTable songs={songs} addSongs={false} subtractFromHeight={216}/>}
+            {songs.length > 0 && <SongTable songs={songs} 
+                                            addSongs={false} 
+                                            subtractFromHeight={217}
+                                            phoneSubtractFromHeight={130}/>}
             {songs.length === 0 &&
                 <div className="faded-text loader">
                     You haven't liked any songs yet.

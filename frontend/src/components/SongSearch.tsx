@@ -40,7 +40,10 @@ const SongSearch: React.FC = () => {
     return (
         <div className="outlet-component">
             <div>
-                {state === "Loaded" && <SongTable songs={songs} addSongs={true} subtractFromHeight={255} /> }
+                {state === "Loaded" && <SongTable songs={songs} 
+                                                  addSongs={true} 
+                                                  subtractFromHeight={255}
+                                                  phoneSubtractFromHeight={130}/> }
             </div>
 
             <div className="loader">

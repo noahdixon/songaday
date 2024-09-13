@@ -20,7 +20,11 @@ const RecommendationsOutlet: React.FC = () => {
             </div>
             <hr className="phone-line"/>
             <div className="outlet-component">
-                {isLoaded && songRecs.length > 0 && <SongTable songs={songRecs} addSongs={true} subtractFromHeight={216} isRecommendations={true}/>}
+                {isLoaded && songRecs.length > 0 && <SongTable songs={songRecs} 
+                                                               addSongs={true} 
+                                                               subtractFromHeight={216} 
+                                                               phoneSubtractFromHeight={130}
+                                                               isRecommendations={true}/>}
                 {songRecs.length === 0 &&
                     <div className="faded-text loader">
                         No recent recommendations.

@@ -6,13 +6,15 @@ import "./SongTable.css"
 interface SongTableProps {
     songs: Song[],
     addSongs: boolean,
-    subtractFromHeight: number
+    subtractFromHeight: number,
+    phoneSubtractFromHeight: number,
     isRecommendations?: boolean
 }
 
-const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFromHeight, isRecommendations=false }) => {
+const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFromHeight, phoneSubtractFromHeight, isRecommendations=false }) => {
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 481);
+    
     const { addSong, removeSong } = useUserContent();
-
     const nullContext = {
         x: 0,
         y: 0,
@@ -20,9 +22,7 @@ const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFro
         songIndex: null,
         song: null
     };
-
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; songIndex: number | null, song: Song | null }>(nullContext);
-
     const contextMenuWidth: number = addSongs ? 81 : 106;
 
     const handleShowMenu = (event: React.MouseEvent, index: number, context: boolean = true) => {
@@ -71,20 +71,28 @@ const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFro
     };
 
     useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth < 481);
+        };
+        window.addEventListener('resize', handleResize);
+
         document.addEventListener("click", handleClickOutside);
         document.addEventListener("keydown", handleKeyDown);
 
-
-        // Cleanup event listener when component is unmounted
+        // Cleanup event listeners when component is unmounted
         return () => {
+            window.removeEventListener('resize', handleResize);
             document.removeEventListener("click", handleClickOutside);
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
+    const height = isMobileView ? `calc(100vh - ${phoneSubtractFromHeight}px)`
+                                : `calc(100vh - ${subtractFromHeight}px)`;
+
     return (
         <div>
-            <table style={{ height: `calc(100vh - ${subtractFromHeight}px)` }}>
+            <table style={{ height }}>
                 <thead>
                     <tr>
                         {!isRecommendations && <th className="num-col first-head">#</th>}
