@@ -123,3 +123,51 @@
     margin-top: -10px;
     margin-bottom: 15px;
 }
+
+.phone-line {
+    border: 0.8px solid var(--pink-color);
+    width: 98%;
+    padding: 0;
+    margin: 0;
+    visibility: collapse;
+    align-self: center;
+}
+
+.phone-line-spaced {
+    margin-top: 10px;
+}
+
+@media (max-width:480px)  {
+
+    .content {
+        border-radius: 8px;
+        width: max-content;
+        margin: 0 5px 5px 5px;
+        padding: 10px;
+    }
+
+    .spotify-logo {
+        width: 90px;
+        height: 27px;
+        padding: 10px 10px 10px 0;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    .top-section {
+        margin-top: -10px;
+        margin-bottom: 0px;
+    }
+
+    .phone-line {
+        padding: 0;
+        margin-bottom: 10px;
+        visibility: visible;
+    }
+
+    .dots {
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+    }
+}

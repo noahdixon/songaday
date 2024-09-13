@@ -15,6 +15,7 @@ const ContentOutlet: React.FC = () => {
                     <ContentRadioButtons setEntity={setEntity}/>
                 </div>
             </div>
+            <hr className="phone-line"/>
             <Outlet />
         </div>
     );

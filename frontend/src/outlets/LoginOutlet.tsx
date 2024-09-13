@@ -77,9 +77,6 @@ const LoginOutlet: React.FC = () => {
                     Log In
                 </button>
             </form>
-            <div>
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-            </div>
             <div className="auth-bottom-message">Don't have an account?&nbsp;
                 <Link className="auth-bottom-message-link" to="/auth/register">Sign up here</Link>.
             </div>

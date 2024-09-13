@@ -4,7 +4,6 @@ import ContentRadioButtons from "../components/ContentRadioButtons";
 
 const SearchOutlet: React.FC = () => {
     const [query, setQuery] = useState<string>("");
-
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -18,6 +17,10 @@ const SearchOutlet: React.FC = () => {
             inputRef.current.value = query;
         }
     };
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, [])
 
     return (
         <div className="outlet">
@@ -41,6 +44,7 @@ const SearchOutlet: React.FC = () => {
                 </div>
                 <ContentRadioButtons setEntity={handleEntityChanged} />
             </div>
+            <hr className="phone-line phone-line-spaced"/>
             <Outlet context={{ query }} key={query} />
         </div>
     );

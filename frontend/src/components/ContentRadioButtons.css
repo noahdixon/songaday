@@ -21,8 +21,15 @@
     background-color: var(--pink-color-highlight);
 }
 
-/* Selected Item Styles */
 .content-radio-item.selected {
-    background-color: var(--pink-color-highlight); /* Background color of selected item */
-    color: var(--pink-color); /* Text color of selected item */
+    background-color: var(--pink-color-highlight); 
+    color: var(--pink-color);
+}
+
+@media (max-width:480px)  {
+    .content-radio-item {
+        padding: 6px;
+        border-radius: 4px;
+        margin-right: 5px;
+    }
 }

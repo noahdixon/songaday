@@ -14,10 +14,11 @@ const RecommendationsOutlet: React.FC = () => {
                         <img src="/Spotify_Logo_RGB_White.png" alt="Spotify Logo" className="spotify-radio-logo-less spotify-logo"/>
                     </a>
                     <div className="recommendations-text">
-                        Showing your song recommendations for the past 31 days.
+                        Showing your recommended songs for the past 31 days.
                     </div>
                 </div>
             </div>
+            <hr className="phone-line"/>
             <div className="outlet-component">
                 {isLoaded && songRecs.length > 0 && <SongTable songs={songRecs} addSongs={true} subtractFromHeight={216} isRecommendations={true}/>}
                 {songRecs.length === 0 &&

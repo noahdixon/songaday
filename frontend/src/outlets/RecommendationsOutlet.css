@@ -1,3 +1,10 @@
 .recommendations-text {
     font-size: 15px;
+    color: var(--grey);
+}
+
+@media (max-width:480px)  {
+    .recommendations-text {
+        font-size: 12px;
+    }
 }

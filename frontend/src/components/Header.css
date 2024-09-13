@@ -66,3 +66,44 @@
     background-color: var(--purple-background-color-light);
     color: var(--pink-color);
 }
+
+@media (max-width:480px)  {
+    .header {
+        padding: 10px;
+        margin: 5px; 
+        border-radius: 8px; 
+    }
+
+    .logo {
+        height: 20px;
+    }
+
+    .profile {
+        height: 24px;
+    }
+
+    .header-dropdown-menu {
+        top: 140%;
+        right: -8px;
+        border-radius: 4px;
+    }
+    
+    .header-dropdown-item {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    .header-dropdown-item-top {
+        border-radius: 4px 4px 0 0;
+    }
+    
+    .header-dropdown-item-bottom {
+        border-radius: 0 0 4px 4px;
+    }
+    
+    
+    .header-dropdown-item:hover {
+        background-color: var(--purple-background-color-light);
+        color: var(--pink-color);
+    }
+}

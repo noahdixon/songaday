@@ -29,7 +29,6 @@ th {
     top: 0px;
     padding: 0px 10px;
     position: sticky;
-    /* z-index: 200; */
 }
 
 td {
@@ -226,7 +225,77 @@ a:hover {
         display: none;
     }
 
-    th:nth-child(2) {
+    th:nth-child(2), td:nth-child(2) {
         border-radius: 8px 0 0 8px;
+    }
+}
+
+/* Media query for phones */
+@media (max-width: 480px) {
+    th:nth-child(2),td:nth-child(2) {
+        width: 0%;
+        border-radius: 4px 0 0 4px;
+    }
+    
+    th:nth-child(3),td:nth-child(3) {
+        width: 0%;
+    }
+    
+    th:nth-child(4),td:nth-child(4) {
+        width: 100%;
+    }
+
+    th:nth-child(8), td:nth-child(8) {
+        width: 0%;
+        border-radius: 0 4px 4px 0;
+    }
+
+    td {
+        padding: 6px 0px;
+    }
+    
+    td, th {
+        text-align: left;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .first-head {
+        border-radius: 4px 0 0 0;
+    }
+    
+    .last-head {
+        border-radius: 0 4px 0 0;
+    }
+    
+    .line-box {
+        padding: 5px 5px 5px 5px;
+    }
+
+    .song-album-art {
+        margin-left: -2px;
+        margin-right: -2px;
+    }
+    
+    .song-spotify-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: -10px;
+        margin-left: -3px;
+    }
+
+    .title {
+        font-size: 14px;
+    }
+    
+    .artist a {
+        font-size: 12px;
+    }
+
+    thead {
+        visibility: collapse;
     }
 }

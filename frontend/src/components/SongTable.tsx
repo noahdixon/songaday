@@ -13,18 +13,25 @@ interface SongTableProps {
 const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFromHeight, isRecommendations=false }) => {
     const { addSong, removeSong } = useUserContent();
 
-    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; songIndex: number | null, song: Song | null }>({
+    const nullContext = {
         x: 0,
         y: 0,
         visible: false,
         songIndex: null,
         song: null
-    });
+    };
+
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; songIndex: number | null, song: Song | null }>(nullContext);
 
     const contextMenuWidth: number = addSongs ? 81 : 106;
 
     const handleShowMenu = (event: React.MouseEvent, index: number, context: boolean = true) => {
         event.preventDefault(); 
+
+        if (contextMenu.songIndex === index) {
+            setContextMenu(nullContext);
+            return;
+        }
 
         const target = event.currentTarget as HTMLElement;
         const rect = target.getBoundingClientRect();
@@ -43,23 +50,23 @@ const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFro
         if (typeof contextMenu.song?.id === 'string') {
             removeSong(contextMenu.song.id);
         }
-        setContextMenu({ ...contextMenu, visible: false });
+        setContextMenu(nullContext);
     };
 
     const handleAddSong = async (): Promise<void> => {
         if (contextMenu.song) {
             addSong(contextMenu.song);
         }
-        setContextMenu({ song: null, songIndex: null, visible: false, x: 0, y: 0 });
+        setContextMenu(nullContext);
     };
 
     const handleClickOutside = () => {
-        setContextMenu({ ...contextMenu, visible: false });
+        setContextMenu(nullContext);
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === "Escape") {
-            setContextMenu({ ...contextMenu, visible: false });
+            setContextMenu(nullContext);
         }
     };
 
