@@ -43,7 +43,7 @@ const ArtistSearch: React.FC = () => {
                 {state === "Loaded" && <ArtistList artists={artists} 
                                                    addArtists={true} 
                                                    subtractFromHeight={255} 
-                                                   phoneSubtractFromHeight={168} /> }
+                                                   phoneSubtractFromHeight={172} /> }
             </div>
 
             <div className="loader">

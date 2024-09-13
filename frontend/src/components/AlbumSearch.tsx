@@ -43,7 +43,7 @@ const AlbumSearch: React.FC = () => {
                 {state === "Loaded" && <AlbumList albums={albums} 
                                                   addAlbums={true} 
                                                   subtractFromHeight={255} 
-                                                  phoneSubtractFromHeight={168}/> }
+                                                  phoneSubtractFromHeight={172}/> }
             </div>
 
             <div className="loader">

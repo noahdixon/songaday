@@ -43,7 +43,7 @@ const SongSearch: React.FC = () => {
                 {state === "Loaded" && <SongTable songs={songs} 
                                                   addSongs={true} 
                                                   subtractFromHeight={255}
-                                                  phoneSubtractFromHeight={168}/> }
+                                                  phoneSubtractFromHeight={172}/> }
             </div>
 
             <div className="loader">
