@@ -103,7 +103,7 @@ a:hover {
     }
 
     .card-title {
-        font-size: 14px;
+        font-size: 15px;
         padding-top: 8px;
     }
 
@@ -112,11 +112,11 @@ a:hover {
     }
 
     .card-artist a {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .card-subtitle, .card-sub-subtitle {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .card-spotify-icon {

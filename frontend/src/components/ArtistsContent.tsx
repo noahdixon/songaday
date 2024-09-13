@@ -6,7 +6,10 @@ const ArtistsContent: React.FC = () => {
 
     return (
         <div className="outlet-component">
-            {isLoaded && artists.length > 0 && <ArtistList artists={artists} addArtists={false} subtractFromHeight={216}/>}
+            {isLoaded && artists.length > 0 && <ArtistList artists={artists} 
+                                                           addArtists={false} 
+                                                           subtractFromHeight={217}
+                                                           phoneSubtractFromHeight={130}/>}
             {isLoaded && artists.length === 0 &&
                 <div className="faded-text loader">
                     You haven't liked any artists yet.

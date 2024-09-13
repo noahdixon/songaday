@@ -6,24 +6,24 @@ import "./CardList.css"
 interface AlbumListProps {
     albums: Album[],
     addAlbums: boolean,
-    subtractFromHeight: number
+    subtractFromHeight: number,
+    phoneSubtractFromHeight: number
 }
 
-const AlbumList: React.FC<AlbumListProps> = ({ albums, addAlbums=true, subtractFromHeight }) => {
+const AlbumList: React.FC<AlbumListProps> = ({ albums, addAlbums=true, subtractFromHeight, phoneSubtractFromHeight }) => {
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 481);
     const { addAlbum, removeAlbum } = useUserContent();
-
-    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; albumIndex: number | null, album: Album | null }>({
-        x: 0,
-        y: 0,
-        visible: false,
-        albumIndex: null,
-        album: null
-    });
-
+    const nullContext = { x: 0, y: 0, visible: false, albumIndex: null, album: null };
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; albumIndex: number | null, album: Album | null }>(nullContext);
     const contextMenuWidth: number = addAlbums ? 90 : 115;
-
+    
     const handleShowMenu = (event: React.MouseEvent, index: number, context: boolean = true) => {
         event.preventDefault(); 
+
+        if (contextMenu.albumIndex === index) {
+            setContextMenu(nullContext);
+            return;
+        }
 
         const target = event.currentTarget as HTMLElement;
         const rect = target.getBoundingClientRect();
@@ -42,40 +42,48 @@ const AlbumList: React.FC<AlbumListProps> = ({ albums, addAlbums=true, subtractF
         if (typeof contextMenu.album?.id === 'string') {
             removeAlbum(contextMenu.album.id);
         }
-        setContextMenu({ ...contextMenu, visible: false });
+        setContextMenu(nullContext);
     };
 
     const handleAddAlbum = async (): Promise<void> => {
         if (contextMenu.album) {
             addAlbum(contextMenu.album);
         }
-        setContextMenu({ album: null, albumIndex: null, visible: false, x: 0, y: 0 });
+        setContextMenu(nullContext);
     };
 
     const handleClickOutside = () => {
-        setContextMenu({ ...contextMenu, visible: false });
+        setContextMenu(nullContext);
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === "Escape") {
-            setContextMenu({ ...contextMenu, visible: false });
+            setContextMenu(nullContext);
         }
     };
 
     useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth < 481);
+        };
+        window.addEventListener('resize', handleResize);
+
         document.addEventListener("click", handleClickOutside);
         document.addEventListener("keydown", handleKeyDown);
 
-
-        // Cleanup event listener when component is unmounted
+        // Cleanup event listeners when component is unmounted
         return () => {
+            window.removeEventListener('resize', handleResize);
             document.removeEventListener("click", handleClickOutside);
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
+    const height = isMobileView ? `calc(100vh - ${phoneSubtractFromHeight}px)`
+                                : `calc(100vh - ${subtractFromHeight}px)`;
+
     return (
-        <div className="list" style={{ height: `calc(100vh - ${subtractFromHeight}px)` }}>
+        <div className="list" style={{ height}}>
             {albums.map((album: Album, index: number) => (
                 <div key={index} 
                      className={`card ${contextMenu.albumIndex === index ? "context-menu-active" : ""}`}

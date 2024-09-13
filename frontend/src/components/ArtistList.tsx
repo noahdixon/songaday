@@ -6,24 +6,24 @@ import "./CardList.css"
 interface ArtistListProps {
     artists: Artist[],
     addArtists: boolean,
-    subtractFromHeight: number
+    subtractFromHeight: number,
+    phoneSubtractFromHeight: number
 }
 
-const ArtistList: React.FC<ArtistListProps> = ({artists, addArtists=true, subtractFromHeight}) => {
+const ArtistList: React.FC<ArtistListProps> = ({artists, addArtists=true, subtractFromHeight, phoneSubtractFromHeight}) => {
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 481);
     const { addArtist, removeArtist } = useUserContent();
-
-    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; artistIndex: number | null, artist: Artist | null }>({
-        x: 0,
-        y: 0,
-        visible: false,
-        artistIndex: null,
-        artist: null
-    });
-
+    const nullContext = { x: 0, y: 0, visible: false, artistIndex: null, artist: null };
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; artistIndex: number | null, artist: Artist | null }>(nullContext);
     const contextMenuWidth: number = addArtists ? 84 : 109;
 
     const handleShowMenu = (event: React.MouseEvent, index: number, context: boolean = true) => {
         event.preventDefault(); 
+
+        if (contextMenu.artistIndex === index) {
+            setContextMenu(nullContext);
+            return;
+        }
 
         const target = event.currentTarget as HTMLElement;
         const rect = target.getBoundingClientRect();
@@ -42,39 +42,48 @@ const ArtistList: React.FC<ArtistListProps> = ({artists, addArtists=true, subtra
         if (typeof contextMenu.artist?.id === 'string') {
             removeArtist(contextMenu.artist.id);
         }
-        setContextMenu({ ...contextMenu, visible: false });
+        setContextMenu(nullContext);
     };
 
     const handleAddArtist = async (): Promise<void> => {
         if (contextMenu.artist) {
             addArtist(contextMenu.artist);
         }
-        setContextMenu({ artist: null, artistIndex: null, visible: false, x: 0, y: 0 });
+        setContextMenu(nullContext);
     };
 
     const handleClickOutside = () => {
-        setContextMenu({ ...contextMenu, visible: false });
+        setContextMenu(nullContext);
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === "Escape") {
-            setContextMenu({ ...contextMenu, visible: false });
+            setContextMenu(nullContext);
         }
     };
 
     useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth < 481);
+        };
+        window.addEventListener('resize', handleResize);
+
         document.addEventListener("click", handleClickOutside);
         document.addEventListener("keydown", handleKeyDown);
 
         // Cleanup event listener when component is unmounted
         return () => {
+            window.removeEventListener('resize', handleResize);
             document.removeEventListener("click", handleClickOutside);
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
+    const height = isMobileView ? `calc(100vh - ${phoneSubtractFromHeight}px)`
+                                : `calc(100vh - ${subtractFromHeight}px)`;
+
     return (
-        <div className="list" style={{ height: `calc(100vh - ${subtractFromHeight}px)` }}>
+        <div className="list" style={{ height }}>
             {artists.map((artist: Artist, index: number) => (
                 <div key={index}
                      className={`card ${contextMenu.artistIndex === index ? "context-menu-active" : ""}`}

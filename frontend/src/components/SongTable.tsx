@@ -13,15 +13,8 @@ interface SongTableProps {
 
 const SongTable: React.FC<SongTableProps> = ({ songs, addSongs=true, subtractFromHeight, phoneSubtractFromHeight, isRecommendations=false }) => {
     const [isMobileView, setIsMobileView] = useState(window.innerWidth < 481);
-    
     const { addSong, removeSong } = useUserContent();
-    const nullContext = {
-        x: 0,
-        y: 0,
-        visible: false,
-        songIndex: null,
-        song: null
-    };
+    const nullContext = { x: 0, y: 0, visible: false, songIndex: null, song: null };
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; visible: boolean; songIndex: number | null, song: Song | null }>(nullContext);
     const contextMenuWidth: number = addSongs ? 81 : 106;
 

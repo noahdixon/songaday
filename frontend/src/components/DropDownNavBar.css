@@ -61,7 +61,6 @@
     left: 0;
     width: 174px;
     z-index: 1000;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     background-color: var(--purple-background-color-highlight);
     border-radius: 0 0 8px 8px;
 }
@@ -74,7 +73,7 @@
     font-size: 14px;
     text-decoration: none;
     transition: 100ms ease;
-    padding: 6px 15px;
+    padding: 8px 15px;
 }
 
 .dropdown-item:last-child {
@@ -112,15 +111,12 @@
     .dropdown-menu {
         top: 24px;
         width: 148px;
-        z-index: 1000;
-        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-        background-color: var(--purple-background-color-highlight);
         border-radius: 0 0 4px 4px;
     }
 
     .dropdown-item {
         font-size: 14px;
-        padding: 6px 8px;
+        padding: 8px 8px;
     }
     
     .dropdown-item:last-child {

@@ -40,7 +40,10 @@ const AlbumSearch: React.FC = () => {
     return (
         <div className="outlet-component">
             <div>
-                {state === "Loaded" && <AlbumList albums={albums} addAlbums={true} subtractFromHeight={255} /> }
+                {state === "Loaded" && <AlbumList albums={albums} 
+                                                  addAlbums={true} 
+                                                  subtractFromHeight={255} 
+                                                  phoneSubtractFromHeight={168}/> }
             </div>
 
             <div className="loader">
