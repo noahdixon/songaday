@@ -5,11 +5,11 @@ textarea:focus, input:focus {
 .auth-flex-container {
     display: flex;
     justify-content: center;
-    margin: 20px;
     flex-grow: 1;
 }
 
 .auth-container {
+    margin: 20px;
     padding: 50px;
     border-radius: 15px;
     background-color: var(--purple-background-color);
@@ -100,4 +100,24 @@ textarea:focus, input:focus {
     font-size: 16px;
     margin-top: 5px;
     text-decoration: underline;
+}
+
+@media (max-width:480px)  {
+    .auth-container {
+        margin: 10px;
+        padding: 30px;
+        border-radius: 8px;
+        flex-grow: 1;
+    }
+
+    .auth-input {
+        width: 55dvw;
+    }
+
+}
+
+@media (max-width:350px)  {
+    .auth-bottom-message {
+        font-size: 13px;
+    }
 }
