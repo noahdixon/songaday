@@ -89,7 +89,7 @@ button {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top;
-    height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
