@@ -20,7 +20,7 @@ const RegisterOutlet: React.FC = () => {
 
     const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const registerResult = await register(email, password, phone);
+        const registerResult = await register(email, password, phone.replaceAll("-",""));
         if (registerResult.success) {
             setErrorMessage("");
             navigate("/auth/login");
