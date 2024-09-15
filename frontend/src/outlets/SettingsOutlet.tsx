@@ -200,7 +200,7 @@ const SettingsOutlet: React.FC = () => {
             <hr className="settings-line"/> */}
             
             <div className="settings-subtitle">
-                Note: If both email delivery is disabled, recommendations will only be shown on the Songaday Recommendations page.
+                Note: If email delivery is disabled, recommendations will only be shown on the Songaday Recommendations page.
                 In this case, if you do not sign in to your account for 30 days your liked content and attribute preferences will be deleted,
                 and you will stop receiving recommendations.
                 You can still sign back into your account at any time and reset them manually.
