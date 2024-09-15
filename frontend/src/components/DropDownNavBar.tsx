@@ -53,8 +53,8 @@ const DropDownNavBar: React.FC = () => {
                 return 'Search';
             case 'content':
                 return 'Liked Content';
-            case 'attributes':
-                return 'Song Attributes';
+            // case 'attributes':
+            //     return 'Song Attributes';
             case 'settings':
                 return 'Delivery Settings';
             case 'about':
@@ -96,11 +96,11 @@ const DropDownNavBar: React.FC = () => {
                             Liked Content
                         </Link>
                     )}
-                    {selected !== 'attributes' && (
+                    {/* {selected !== 'attributes' && (
                         <Link to="/attributes" className="dropdown-item" onClick={closeMenu}>
                             Song Attributes
                         </Link>
-                    )}
+                    )} */}
                     {selected !== 'settings' && (
                         <Link to="/settings" className="dropdown-item" onClick={closeMenu}>
                             Delivery Settings

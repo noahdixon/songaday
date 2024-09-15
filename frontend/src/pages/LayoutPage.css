@@ -137,11 +137,10 @@
     margin-top: 10px;
 }
 
-@media (max-width:480px)  {
+@media (max-width:480px) {
 
     .content {
         border-radius: 8px;
-        width: max-content;
         margin: 0 5px 5px 5px;
         padding: 10px;
     }
@@ -163,11 +162,5 @@
         padding: 0;
         margin-bottom: 10px;
         visibility: visible;
-    }
-
-    .dots {
-        width: 15px;
-        height: 15px;
-        cursor: pointer;
     }
 }

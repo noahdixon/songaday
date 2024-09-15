@@ -129,11 +129,14 @@ const SettingsOutlet: React.FC = () => {
                 <div className="settings-title">
                     Recommendation Frequency:
                 </div>
-                <CustomSelect 
-                    options={frequecyOptions} 
-                    initialValue={initialFrequency}
-                    onChange={handleFrequencyChange}
-                />
+                <div>
+                    <CustomSelect 
+                        options={frequecyOptions} 
+                        initialValue={initialFrequency}
+                        onChange={handleFrequencyChange}
+                    />
+                </div>
+                
             </div>
 
             <div className="settings-subtitle">
@@ -158,7 +161,7 @@ const SettingsOutlet: React.FC = () => {
 
             <hr className="settings-line"/>
 
-            <div className="settings-switch-container">
+            {/* <div className="settings-switch-container">
 
             {phone ? (
                 <>
@@ -194,10 +197,10 @@ const SettingsOutlet: React.FC = () => {
                 
             </div>
 
-            <hr className="settings-line"/>
+            <hr className="settings-line"/> */}
             
             <div className="settings-subtitle">
-                Note: If both email and SMS delivery are disabled, recommendations will only be shown on the Songaday Recommendations page.
+                Note: If both email delivery is disabled, recommendations will only be shown on the Songaday Recommendations page.
                 In this case, if you do not sign in to your account for 30 days your liked content and attribute preferences will be deleted,
                 and you will stop receiving recommendations.
                 You can still sign back into your account at any time and reset them manually.

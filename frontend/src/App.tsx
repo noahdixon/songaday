@@ -29,7 +29,7 @@ const App: React.FC = () => {
         <div>
             <ToastContainer
             position="top-center"
-            autoClose={1500}
+            // autoClose={1500}
             hideProgressBar
             newestOnTop={false}
             closeOnClick
@@ -71,7 +71,7 @@ const App: React.FC = () => {
                             <Route path="albums" element={<AlbumsContent />} />
                             <Route path="artists" element={<ArtistsContent />} />
                         </Route>
-                        <Route path="attributes" element={<AttributesOutlet />} />
+                        {/* <Route path="attributes" element={<AttributesOutlet />} /> */}
                         <Route path="settings" element={<SettingsOutlet />} />
                         <Route path="about" element={<AboutOutlet />} />
                         <Route path="contact" element={<ContactOutlet />} />

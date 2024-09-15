@@ -98,3 +98,11 @@ button {
 .no-scroll {
     overflow-y: hidden; /* or any other value you want */
 }
+
+@media (max-width:480px) {
+    .Toastify__toast-container{
+        width: 80vw;
+        margin: 5px;
+        margin-left: 10vw;
+      }
+}

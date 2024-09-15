@@ -110,6 +110,18 @@ textarea:focus, input:focus {
         flex-grow: 1;
     }
 
+    .auth-logo {
+        height: 30px;
+        margin-bottom: 20px;
+    }
+    
+
+    .auth-header-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+        width: 200px;
+    }
+
     .auth-input {
         width: 55dvw;
     }

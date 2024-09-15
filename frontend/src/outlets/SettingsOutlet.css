@@ -2,13 +2,6 @@
     padding: 15px;
 }
 
-/* Media query to reduce padding if window is small */
-@media (max-width: 680px) {
-    .settings-container {
-        padding: 0;
-    }
-}
-
 .settings-inside-container {
     max-width: 700px;
 }
@@ -64,4 +57,19 @@
 .settings-line {
     border: 0.8px solid var(--grey-darker);
     margin: 20px 0;
+}
+
+/* Media query to reduce padding if window is small */
+@media (max-width: 540px) {
+    .settings-container {
+        padding: 5px;
+    }
+}
+
+@media (max-width:3780px) {
+    .settings-frequency-container {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
 }

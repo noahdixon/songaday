@@ -23,9 +23,9 @@ const Sidebar: React.FC = () => {
             <Link to="/content" className={`sidebar-item ${selected === 'content' ? 'selected' : ''}`}>
                 Liked Content
             </Link>
-            <Link to="/attributes" className={`sidebar-item ${selected === 'attributes' ? 'selected' : ''}`}>
+            {/* <Link to="/attributes" className={`sidebar-item ${selected === 'attributes' ? 'selected' : ''}`}>
                 Song Attributes
-            </Link>
+            </Link> */}
             <Link to="/settings" className={`sidebar-item ${selected === 'settings' ? 'selected' : ''}`}>
                 Delivery Settings
             </Link>

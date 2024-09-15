@@ -248,6 +248,7 @@ a:hover {
     th:nth-child(8), td:nth-child(8) {
         width: 0%;
         border-radius: 0 4px 4px 0;
+        padding-right: 10px
     }
 
     td {
