@@ -196,11 +196,6 @@ const getRecommendations = async () => {
                     link
                 );
             }
-
-            // Send text
-            if (user.sendTexts) {
-                
-            }
         }
 
     } catch (error: any) {
@@ -215,11 +210,11 @@ const getRecommendations = async () => {
 const removeOldRecommendations = async () => {
     try {
         // Get date that was 31 days ago
-        const thirtyDaysAgo = new Date();
+        const thirtyDaysAgo: Date = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 31);
 
         // Delete records SongRec table where date is older than 31 days
-        const deleted = await prisma.songRec.deleteMany({
+        await prisma.songRec.deleteMany({
             where: {
                 date: {
                     lt: thirtyDaysAgo, // Less than 30 days ago

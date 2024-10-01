@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -31,8 +25,8 @@ model User {
   lastLogin     DateTime      @default(now())
   token         Token?
   songLikes     SongLike[]    // Relation to the SongLike table
-  albumLikes    AlbumLike[]   // Relation to the SongLike table
-  artistLikes   ArtistLike[]  // Relation to the SongLike table
+  albumLikes    AlbumLike[]   // Relation to the AlbumLike table
+  artistLikes   ArtistLike[]  // Relation to the ArtistLike table
   songRecs      SongRec[]     // Relation to the SongRec table
   sendEmails    Boolean       @default(true)
   sendTexts     Boolean       @default(true)
@@ -40,43 +34,43 @@ model User {
 }
 
 model Token {
-  userId      Int       @id
+  userId      Int             @id
   token       String 
   expiresAt   DateTime
-  user        User      @relation(fields: [userId], references: [id])
+  user        User            @relation(fields: [userId], references: [id])
 }
 
 model SpotifyToken {
-  id          Int       @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   token       String
   expiresAt   DateTime
 }
 
 model SongLike {
-  userId      Int          // Foreign key referencing User
+  userId      Int             // Foreign key referencing User
   songId      String       
-  user        User         @relation(fields: [userId], references: [id]) // Reference to user
-  @@id([userId, songId])   // Composite primary key
+  user        User            @relation(fields: [userId], references: [id]) // Reference to user
+  @@id([userId, songId])      // Composite primary key
 }
 
 model AlbumLike {
-  userId      Int          // Foreign key referencing User
+  userId      Int             // Foreign key referencing User
   albumId     String       
-  user        User         @relation(fields: [userId], references: [id]) // Reference to user
-  @@id([userId, albumId])   // Composite primary key
+  user        User            @relation(fields: [userId], references: [id]) // Reference to user
+  @@id([userId, albumId])     // Composite primary key
 }
 
 model ArtistLike {
-  userId      Int          // Foreign key referencing User
+  userId      Int             // Foreign key referencing User
   artistId    String       
-  user        User         @relation(fields: [userId], references: [id]) // Reference to user
-  @@id([userId, artistId])   // Composite primary key
+  user        User            @relation(fields: [userId], references: [id]) // Reference to user
+  @@id([userId, artistId])    // Composite primary key
 }
 
 model SongRec {
-  userId      Int          // Foreign key referencing User
+  userId      Int             // Foreign key referencing User
   songId      String       
-  user        User         @relation(fields: [userId], references: [id]) // Reference to user
-  date        DateTime     @default(now())
-  @@id([userId, songId])   // Composite primary key
+  user        User            @relation(fields: [userId], references: [id]) // Reference to user
+  date        DateTime        @default(now())
+  @@id([userId, songId])      // Composite primary key
 }
