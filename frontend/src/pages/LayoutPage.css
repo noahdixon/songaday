@@ -91,7 +91,16 @@
     display: flex;
     border-radius: 15px;
     flex-grow: 1;
+    border: 1px solid transparent;
+    transition: border 0.1s ease;
 }
+
+.search-bar:hover,
+.search-bar:focus-within {
+    border: 1px solid var(--pink-color);
+}
+
+
 
 .search-input {
     flex-grow: 1;
@@ -100,7 +109,8 @@
     border: none;
     color: aliceblue;
     outline: none;
-    font-weight: 550;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 ::placeholder {
@@ -109,8 +119,8 @@
 }
 
 .search-icon {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     padding-left: 8px;
     vertical-align: middle;
 }

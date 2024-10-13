@@ -59,7 +59,7 @@ const RegisterOutlet: React.FC = () => {
                         />
                     </label>
                 </div>
-                <div className="auth-label-input">
+                {/* <div className="auth-label-input">
                     <label className="auth-label">
                         Phone Number (Recommended)
                         <PhoneNumberInput
@@ -70,7 +70,7 @@ const RegisterOutlet: React.FC = () => {
                             }}
                         />
                     </label>
-                </div>
+                </div> */}
                 <div className="auth-label-input">
                     <label className="auth-label">
                         Password*

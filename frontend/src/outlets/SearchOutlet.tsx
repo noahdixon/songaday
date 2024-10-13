@@ -36,7 +36,7 @@ const SearchOutlet: React.FC = () => {
                         <input
                             className="search-input"
                             type="text"
-                            placeholder="Search Spotify Content..."
+                            placeholder="Search Spotify..."
                             ref={inputRef}
                             onKeyPress={handleEnter}
                         />

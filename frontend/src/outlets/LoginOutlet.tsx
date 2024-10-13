@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import PasswordInput from '../components/PasswordInput';
-import RegisterForm from '../components/RegisterForm';
 import { useAuth } from '../context/AuthContext';
 import { login } from '../services/authService';
 
@@ -26,7 +24,6 @@ const LoginOutlet: React.FC = () => {
             setIsLoggedIn(true);
             setErrorMessage("");
             navigate("/");
-            toast.success("Login successful.")
         } else {
             setErrorMessage(loginResult.error!);
         }

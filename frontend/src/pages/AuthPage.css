@@ -50,7 +50,7 @@ textarea:focus, input:focus {
     background-color: transparent;
     border: 1px var(--grey) solid;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     color: aliceblue;
     width: 300px;

@@ -10,7 +10,6 @@ import LayoutPage from './pages/LayoutPage';
 import RecommendationsOutlet from './outlets/RecommendationsOutlet';
 import ContentOutlet from './outlets/ContentOutlet';
 import SearchOutlet from './outlets/SearchOutlet';
-import AttributesOutlet from './outlets/AttributesOutlet';
 import SettingsOutlet from './outlets/SettingsOutlet';
 import AboutOutlet from './outlets/AboutOutlet';
 import ContactOutlet from './outlets/ContactOutlet';
@@ -29,7 +28,7 @@ const App: React.FC = () => {
         <div>
             <ToastContainer
             position="top-center"
-            // autoClose={1500}
+            autoClose={1500}
             hideProgressBar
             newestOnTop={false}
             closeOnClick
