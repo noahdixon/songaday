@@ -32,11 +32,6 @@ let refreshPromise: Promise<SpotifyTokenServiceResponse> | null = null;
 let isRefreshing: boolean = false;
 
 /**
- * Gets a new Spotify access token from Spotify and updates the access token in memory and on the database
- * @returns A SpotifyServiceResponse containing the new accessToken if successful, or an error message if not successful
- */
-
-/**
  * Gets a spotify access token.
  * First checks if the token is being updated by another call and waits on that promise if there is.
  * Else checks if there is a non expired token in memory and returns it if there is.

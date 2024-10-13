@@ -30,6 +30,7 @@ app.use(checkJSON);
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, '../../../../frontend/build')));
 
+// Backend routes
 app.use('/auth', AuthRoutes);
 app.post('/search', authenticateToken, checkEntityBody, searchContent);
 app.use('/user', authenticateToken, UserRoutes);

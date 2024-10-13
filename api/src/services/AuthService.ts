@@ -4,10 +4,8 @@ import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { PrismaClient, Token } from "@prisma/client";
 import { User } from '@prisma/client';
-// import dotenv from 'dotenv';
-// dotenv.config();
 
-const refreshTokenTime: number = 0.5 * 60 * 1000; // 30 seconds
+const refreshTokenTime: number = 7 * 24 * 60 * 60 * 1000; // 1 week
 const accessTokenTime: string = "1d"; // 1 day
 
 const prisma: PrismaClient = new PrismaClient();
@@ -190,7 +188,7 @@ export const setRefreshTokenCookie = (res: Response, refreshToken: string) => {
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000 // Cookie expires in 7 days
+        maxAge: refreshTokenTime // Cookie expires in 7 days
     });
 }
 
